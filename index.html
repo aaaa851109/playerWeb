@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My music play list</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <link rel="stylesheet" href="style copy.css" />
+    <script
+      src="https://kit.fontawesome.com/ac0b6d6bc8.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <audio id="audio" src="###"></audio>
+    <div id="controlPanel">
+      <select class="selectList">
+        <option value="蕭秉治-毒藥">蕭秉治-毒藥</option>
+        <option value="謝和弦-你是真的離開我">謝和弦-你是真的離開我</option>
+        <option value="陳壹千-仗著">陳壹千-仗著</option>
+        <option value="怕胖團-魚">怕胖團-魚</option>
+      </select>
+      <hr />
+      <button id="playStopBtn"><i class="fa-solid fa-play fa-2x"></i></button>
+      <button id="replayBtn"><i class="fa-solid fa-stop fa-2x"></i></button>
+      <button id="prevTime"><i class="fa-solid fa-backward fa-2x"></i></button>
+      <button id="prevSong">
+        <i class="fa-solid fa-forward-step fa-rotate-180 fa-2x"></i>
+      </button>
+      <button id="nextSong">
+        <i class="fa-solid fa-forward-step fa-2x"></i>
+      </button>
+      <button id="nextTime">
+        <i class="fa-solid fa-backward fa-rotate-180 fa-2x"></i>
+      </button>
+      <button id="setMute">
+        <i class="fa-solid fa-volume-up fa-2x"></i>
+      </button>
+      <button id="repeatSong" class="repeatSong">
+        <i class="fa-solid fa-redo fa-2x"></i>
+      </button>
+      <button id="randomSong"><i class="fa-solid fa-shuffle fa-2x"></i></button>
+      <button id="repeatList"><i class="fa-solid fa-sync fa-2x"></i></button>
+      <button id="tool">
+        <i class="fa-solid fa-screwdriver-wrench fa-2x"></i>
+      </button>
+
+      <hr />
+      <input id="setVolume" type="range" value="70" />
+      <input id="clickVolumeDown" type="button" value="-" />
+      <input id="clickVolumeUp" type="button" value="+" />
+      <input id="showVolume" type="text" readonly />
+      <hr />
+      <input id="progressBar" type="range" value="0" />
+      <hr />
+      <div id="showTimeText">00:00 / 00:00</div>
+      <div id="showDetailText">歡迎使用我的播放器</div>
+      <div id="showStatus">正常</div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
