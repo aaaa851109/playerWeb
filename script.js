@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //設定 ==> 音量
   function setVolumeFun() {
-    audio.volume = setVolume.value / 100;
+    audio.volume = setVolume.value / 1000;
     showVolume.value = setVolume.value;
     if (audio.volume == 0) {
       setMute.querySelector("i").classList.remove("fa-volume-up");
@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedIndex + 1 == musicList.length && isrepeatList == true) {
       selectedIndex = 0;
       selectList.value = selectList[selectedIndex].value;
+      audio.src = musicList[selectedIndex];
       play();
     } else if (selectedIndex + 1 == musicList.length) {
       stop();
