@@ -43,11 +43,18 @@ document.addEventListener("DOMContentLoaded", () => {
   function setVolumeFun() {
     audio.volume = setVolume.value / 100;
     showVolume.value = setVolume.value;
+    if (audio.volume == 0) {
+      setMute.querySelector("i").classList.remove("fa-volume-up");
+      setMute.querySelector("i").classList.add("fa-volume-xmark");
+    } else if (audio.volume > 0) {
+      setMute.querySelector("i").classList.remove("fa-volume-xmark");
+      setMute.querySelector("i").classList.add("fa-volume-up");
+    }
   }
   setVolumeFun(); // 顯示初始音量
   setVolume.addEventListener("input", setVolumeFun); // 滑動時顯示音量
   function setVolumeClick(n) {
-    setVolume.value = parseInt(setVolume.value) + n;
+    setVolume.value = Math.min(100, Math.max(0, parseInt(setVolume.value) + n));
     setVolumeFun(); // 顯示更改音量
   }
   clickVolumeUp.addEventListener("click", function () {
