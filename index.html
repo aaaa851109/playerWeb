@@ -15,7 +15,6 @@
   <body>
     <audio id="audio" src="###"></audio>
     <div id="controlPanel" class="box">
-      
       <select id="selectList" class="select-nav">
         <option value="蕭秉治-毒藥">蕭秉治-毒藥</option>
         <option value="謝和弦-你是真的離開我">謝和弦-你是真的離開我</option>
@@ -26,7 +25,9 @@
       <div class="control-btn">
         <button id="playStopBtn"><i class="fa-solid fa-play fa-2x"></i></button>
         <button id="replayBtn"><i class="fa-solid fa-stop fa-2x"></i></button>
-        <button id="prevTime"><i class="fa-solid fa-backward fa-2x"></i></button>
+        <button id="prevTime">
+          <i class="fa-solid fa-backward fa-2x"></i>
+        </button>
         <button id="prevSong">
           <i class="fa-solid fa-forward-step fa-rotate-180 fa-2x"></i>
         </button>
@@ -42,7 +43,9 @@
         <button id="repeatSong" class="repeatSong">
           <i class="fa-solid fa-redo fa-2x"></i>
         </button>
-        <button id="randomSong"><i class="fa-solid fa-shuffle fa-2x"></i></button>
+        <button id="randomSong">
+          <i class="fa-solid fa-shuffle fa-2x"></i>
+        </button>
         <button id="repeatList"><i class="fa-solid fa-sync fa-2x"></i></button>
         <button id="tool">
           <i class="fa-solid fa-screwdriver-wrench fa-2x"></i>
@@ -56,15 +59,23 @@
         <input id="showVolume" type="text" readonly />
         <input id="progressBar" type="range" value="0" />
       </div>
-      
+
       <div class="show-dtl">
         <div id="showTimeText">00:00 / 00:00</div>
         <div id="showDetailText">歡迎使用我的播放器</div>
         <div id="showStatus">正常</div>
       </div>
-  
     </div>
-
+    <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
+    <div id="overlay">
+      <div id="popup">
+        <h2>閒置過久</h2>
+        <p>請問要繼續播放嗎?</p>
+        <button id="closePop">暫停</button>
+        <button id="closePopPly">播放</button>
+      </div>
+    </div>
+    <!-- <button onclick="showPopup()">顯示彈跳視窗</button> -->
     <script src="script.js"></script>
   </body>
 </html>
