@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("mousemove", (event) => {
     if (wasPlaying == true) {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(onTimeDo, 5000);
+      timeoutId = setTimeout(onTimeDo, 3000000);
     }
   });
   // 顯示彈跳視窗
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     audio.play();
     updatePlayStatus();
     console.log("判斷播放:" + wasPlaying);
-    timeoutId = setTimeout(onTimeDo, 5000);
+    timeoutId = setTimeout(onTimeDo, 3000000);
   }
   playStopBtn.addEventListener("click", function () {
     if (audio.paused) {
