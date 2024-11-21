@@ -1,86 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My music play list</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/ac0b6d6bc8.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/css/all.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My music play list</title>
-  <link rel="stylesheet" href="style.css" />
+  <body>
+    <audio id="audio" src="###"></audio>
+    <div id="controlPanel" class="container text-center">
+      <!-- 下拉式選單 -->
+      <select id="selectList" class="">
+        <option value="蕭秉治-毒藥">蕭秉治-毒藥</option>
+        <option value="謝和弦-你是真的離開我">謝和弦-你是真的離開我</option>
+        <option value="陳壹千-仗著">陳壹千-仗著</option>
+        <option value="怕胖團-魚">怕胖團-魚</option>
+      </select>
 
-  <script src="https://kit.fontawesome.com/ac0b6d6bc8.js" crossorigin="anonymous"></script>
-</head>
+      <!-- 曲目歌手進度條 -->
+      <div class="row">
+        <div id="showDetailText">歡迎使用我的播放器</div>
+        <div class="col-12">
+          <input
+            id="progressBar"
+            class="col-6 mx-auto"
+            type="range"
+            value="0"
+          />
+        </div>
+        <div class="row col-6 mx-auto">
+          <div id="showNowTime" class="col-6" style="text-align: left">
+            00:00
+          </div>
+          <div id="showSongTime" class="col-6" style="text-align: right">
+            00:00
+          </div>
+        </div>
 
-<body>
-  <audio id="audio" src="###"></audio>
-  <div id="controlPanel" class="box">
-    <select id="selectList" class="select-nav">
-      <option value="蕭秉治-毒藥">蕭秉治-毒藥</option>
-      <option value="謝和弦-你是真的離開我">謝和弦-你是真的離開我</option>
-      <option value="陳壹千-仗著">陳壹千-仗著</option>
-      <option value="怕胖團-魚">怕胖團-魚</option>
-    </select>
+        <div id="showStatus">正常</div>
+      </div>
 
-    <div class="control-btn">
-      <button id="playStopBtn"><i class="fa-solid fa-play fa-2x"></i></button>
-      <button id="replayBtn"><i class="fa-solid fa-stop fa-2x"></i></button>
-      <button id="prevTime">
-        <i class="fa-solid fa-backward fa-2x"></i>
-      </button>
-      <button id="prevSong">
-        <i class="fa-solid fa-forward-step fa-rotate-180 fa-2x"></i>
-      </button>
-      <button id="nextSong">
-        <i class="fa-solid fa-forward-step fa-2x"></i>
-      </button>
-      <button id="nextTime">
-        <i class="fa-solid fa-backward fa-rotate-180 fa-2x"></i>
-      </button>
-      <button id="setMute">
-        <i class="fa-solid fa-volume-up fa-2x"></i>
-      </button>
-      <button id="repeatSong" class="repeatSong">
-        <i class="fa-solid fa-redo fa-2x"></i>
-      </button>
-      <button id="randomSong">
-        <i class="fa-solid fa-shuffle fa-2x"></i>
-      </button>
-      <button id="repeatList"><i class="fa-solid fa-sync fa-2x"></i></button>
-      <button id="tool">
-        <i class="fa-solid fa-screwdriver-wrench fa-2x"></i>
-      </button>
+      <!-- 功能按鈕 -->
+      <div class="">
+        <button id="replayBtn" class="fa-solid fa-stop fa-2x btn"></button>
+        <button id="prevTime" class="fa-solid fa-backward fa-2x btn"></button>
+        <button
+          id="prevSong"
+          class="fa-solid fa-forward-step fa-rotate-180 fa-2x btn"
+        ></button>
+        <button id="playStopBtn" class="fa-solid fa-play fa-2x btn"></button>
+        <button
+          id="nextSong"
+          class="fa-solid fa-forward-step fa-2x btn"
+        ></button>
+        <button
+          id="nextTime"
+          class="fa-solid fa-backward fa-rotate-180 fa-2x btn"
+        ></button>
+        <button id="setMute" class="fa-solid fa-volume-up fa-2x btn"></button>
+        <button id="repeatSong" class="fa-solid fa-redo fa-2x btn"></button>
+        <button id="randomSong" class="fa-solid fa-shuffle fa-2x btn"></button>
+        <button id="repeatList" class="fa-solid fa-sync fa-2x btn"></button>
+        <button
+          id="tool"
+          class="fa-solid fa-screwdriver-wrench fa-2x btn"
+        ></button>
+      </div>
+
+      <!-- 聲音功能 -->
+      <div class="">
+        <input id="setVolume" type="range" value="30" />
+        <input id="clickVolumeDown" type="button" value="-" />
+        <input id="clickVolumeUp" type="button" value="+" />
+        <input id="showVolume" type="text" readonly />
+      </div>
     </div>
 
-    <div class="control-ipt">
-      <input id="setVolume" type="range" value="30" />
-      <input id="clickVolumeDown" type="button" value="-" />
-      <input id="clickVolumeUp" type="button" value="+" />
-      <input id="showVolume" type="text" readonly />
-      <input id="progressBar" type="range" value="0" />
-    </div>
+    <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
+    <!-- <div id="overlay">
+      <div id="popup">
+        <h2>閒置過久</h2>
+        <p>請問要繼續播放嗎?</p>
+        <button id="closePop">暫停</button>
+        <button id="closePopPly">播放</button>
+      </div>
+    </div> -->
 
-    <div class="show-dtl">
-      <div id="showTimeText">00:00 / 00:00</div>
-      <div id="showDetailText">歡迎使用我的播放器</div>
-      <div id="showStatus">正常</div>
-    </div>
-  </div>
-  <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
-  <div id="overlay">
-    <div id="popup">
-      <h2>閒置過久</h2>
-      <p>請問要繼續播放嗎?</p>
-      <button id="closePop">暫停</button>
-      <button id="closePopPly">播放</button>
-    </div>
-  </div>
-
-  <div id="setTimeBreak">
-    <input id="setTimeIpt" type="number" placeholder="輸入秒數">
-    <button id="setTimeBtn">輸入</button>
-    <button id="setTimeClo">關閉功能</button>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -13,6 +13,7 @@ let isRandom = false; // 設置初始狀態為不隨機播放
 let isrepeatList = false; // 設置初始狀態為不循環歌單
 let currentSongIndex; // 設置初始狀態
 let wasPlaying = false; //判斷是否播放
+let wasMute = false; //判斷是否播放
 let iptTime = 0;
 
 //test
@@ -35,62 +36,69 @@ document.addEventListener("DOMContentLoaded", () => {
   const clickVolumeUp = document.querySelector("#clickVolumeUp");
   const clickVolumeDown = document.querySelector("#clickVolumeDown");
   const showVolume = document.querySelector("#showVolume");
-  const showTimeText = document.querySelector("#showTimeText");
+  const showNowTime = document.querySelector("#showNowTime");
+  const showSongTime = document.querySelector("#showSongTime");
   const showDetailText = document.querySelector("#showDetailText");
   const progressBar = document.querySelector("#progressBar");
   const showStatus = document.querySelector("#showStatus");
   const closePop = document.querySelector("#closePop");
   const closePopPly = document.querySelector("#closePopPly");
-  const setTimeBreak = document.querySelector("#setTimeBreak");
-
-  const setTimeIpt = document.querySelector("#setTimeIpt");
-  const setTimeBtn = document.querySelector("#setTimeBtn");
-  const setTimeClo = document.querySelector("#setTimeClo");
 
   /////////////////////////////////////////////////////////////
-  let timeoutId;
-  function onTimeDo() {
-    console.log("滑鼠未移動超過1分鐘，執行動作");
-    showPopup();
-    stop();
-  }
-  // 添加滑鼠移動事件監聽器
-  window.addEventListener("mousemove", (event) => {
-    if (wasPlaying == true) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(onTimeDo, 60000); //一分鐘
-    }
-  });
-  // 顯示彈跳視窗
-  function showPopup() {
-    document.getElementById("overlay").style.display = "flex";
-  }
-  // 關閉彈跳視窗
-  function closePopup() {
-    document.getElementById("overlay").style.display = "none";
-  }
-  closePop.addEventListener("click", function () {
-    closePopup();
-  });
-  closePopPly.addEventListener("click", function () {
-    closePopup();
-    play();
-  });
+  // let timeoutId;
+  // function onTimeDo() {
+  //   console.log("滑鼠未移動超過1分鐘，執行動作");
+  //   showPopup();
+  //   stop();
+  // }
+  // // 添加滑鼠移動事件監聽器
+  // window.addEventListener("mousemove", (event) => {
+  //   if (wasPlaying == true) {
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(onTimeDo, 1000); //一分鐘
+  //   }
+  // });
+  // // 顯示彈跳視窗
+  // function showPopup() {
+  //   document.getElementById("overlay").style.display = "flex";
+  // }
+  // // 關閉彈跳視窗
+  // function closePopup() {
+  //   document.getElementById("overlay").style.display = "none";
+  // }
+  // closePop.addEventListener("click", function () {
+  //   closePopup();
+  // });
+  // closePopPly.addEventListener("click", function () {
+  //   closePopup();
+  //   play();
+  // });
   ////////////////////////////////////////////
 
   audio.src = musicList[0];
+
+  //====================================================================================
   //設定 ==> 音量
   function setVolumeFun() {
     audio.volume = setVolume.value / 100;
     showVolume.value = setVolume.value;
-    if (audio.volume == 0) {
-      setMute.querySelector("i").classList.remove("fa-volume-up");
-      setMute.querySelector("i").classList.add("fa-volume-xmark");
-    } else if (audio.volume > 0) {
-      setMute.querySelector("i").classList.remove("fa-volume-xmark");
-      setMute.querySelector("i").classList.add("fa-volume-up");
+    mute();
+  }
+  //更換靜音圖示
+  function mute() {
+    if (audio.muted || audio.volume == 0) {
+      setMute.setAttribute("class", "fa-solid fa-volume-xmark fa-2x btn");
+    } else {
+      setMute.setAttribute("class", "fa-solid fa-volume-up fa-2x btn");
     }
   }
+  //靜音 ==> 切換
+  setMute.addEventListener("click", function () {
+    wasMute = audio.muted;
+    console.log("Current mute state:", wasMute);
+    audio.muted = !audio.muted;
+    mute();
+  });
   setVolumeFun(); // 顯示初始音量
   setVolume.addEventListener("input", setVolumeFun); // 滑動時顯示音量
   function setVolumeClick(n) {
@@ -103,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   clickVolumeDown.addEventListener("click", function () {
     setVolumeClick(-1);
   });
-
+  //===================================================================================
   //取得時間格式
   function getTimeFormat(t) {
     let m = parseInt(t / 60);
@@ -112,16 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
     s = s < 10 ? "0" + s : s;
     return m + ":" + s;
   }
-
-  //判斷有無播放
-  function updatePlayStatus() {
-    wasPlaying = !audio.paused; // 更新播放狀態
-  }
-
-  //播放時 ==> 進度顯示在showTimeText 及 progressBar
+  //曲目歌手進度條
   function getMusicTime() {
-    showTimeText.innerText =
-      getTimeFormat(audio.currentTime) + " / " + getTimeFormat(audio.duration);
+    showNowTime.innerText = getTimeFormat(audio.currentTime);
+    showSongTime.innerText = getTimeFormat(audio.duration);
     progressBar.value = audio.currentTime;
   }
   // 設定 ==> 滑動進度條
@@ -133,33 +135,36 @@ document.addEventListener("DOMContentLoaded", () => {
   audio.addEventListener("loadedmetadata", function () {
     progressBar.max = audio.duration;
   });
-
+  //=============================================================================
+  //判斷有無播放及更新圖示
+  function updatePlayStatus() {
+    wasPlaying = !audio.paused; // 更新播放狀態
+    if (wasPlaying == true) {
+      playStopBtn.setAttribute("class", "fa-solid fa-pause fa-2x btn");
+    } else {
+      playStopBtn.setAttribute("class", "fa-solid fa-play fa-2x btn");
+    }
+    console.log("判斷播放:" + wasPlaying);
+  }
   //播放&暫停 ==> 音樂
   function stop() {
-    playStopBtn.querySelector("i").classList.remove("fa-pause");
-    playStopBtn.querySelector("i").classList.add("fa-play");
     showDetailText.innerText = "音樂暫停中...";
     audio.pause();
     updatePlayStatus();
-    console.log("判斷播放:" + wasPlaying);
     // 清除滑鼠移動計時器
-    clearTimeout(timeoutId);
-    setTimeCloShow();
+    // clearTimeout(timeoutId);
   }
   function play() {
-    playStopBtn.querySelector("i").classList.remove("fa-play"); // 移除icon
-    playStopBtn.querySelector("i").classList.add("fa-pause");
     if (isRandom == true) {
       showDetailText.innerText = `正在播放 ${selectList[randomIndex].value}`;
     } else {
       showDetailText.innerText = `正在播放 ${selectList[selectedIndex].value}`;
     }
     setInterval(() => getMusicTime(), 500);
-    console.log(progressBar.max);
+    //////////////////////////////////////
     audio.play();
     updatePlayStatus();
-    console.log("判斷播放:" + wasPlaying);
-    timeoutId = setTimeout(onTimeDo, 60000);
+    // timeoutId = setTimeout(onTimeDo, 60000);
   }
   playStopBtn.addEventListener("click", function () {
     if (audio.paused) {
@@ -168,13 +173,12 @@ document.addEventListener("DOMContentLoaded", () => {
       stop();
     }
   });
-
   //停止&歸零 ==> 音樂
   replayBtn.addEventListener("click", function () {
     stop();
     audio.currentTime = 0; // 時間歸零
   });
-
+  //================================================================================
   //快轉||倒轉 ==> 音樂
   function changeTime(s) {
     audio.currentTime += s;
@@ -185,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   nextTime.addEventListener("click", function () {
     changeTime(10);
   });
-
   //次曲||上曲 ==> 音樂
   prevSong.addEventListener("click", function () {
     if (selectedIndex == 0) {
@@ -212,34 +215,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  //=======================================================================
   //選單切換 ==> 歌曲
   selectList.addEventListener("change", function (event) {
     updatePlayStatus();
     console.log(event);
     selectedIndex = event.target.selectedIndex;
     selectedIndexInnerText = event.target.options[selectedIndex].text;
-    //抓使用者選到的選項索引值 ==> 並賦值給全域使用
-    // console.log(selectedIndex);
-    // console.log(selectedIndexInnerText);
     audio.src = musicList[selectedIndex]; //抓使用者選到的選項value屬值
     if (wasPlaying) {
       play();
     }
   });
-
-  //靜音 ==> 切換
-  setMute.addEventListener("click", function () {
-    if (audio.muted) {
-      audio.muted = !audio.muted;
-      setMute.querySelector("i").classList.remove("fa-volume-xmark");
-      setMute.querySelector("i").classList.add("fa-volume-up");
-    } else {
-      audio.muted = !audio.muted;
-      setMute.querySelector("i").classList.remove("fa-volume-up");
-      setMute.querySelector("i").classList.add("fa-volume-xmark");
-    }
-  });
-
+  //=========================================================================
   // 播放結束 ==> 判斷行為
   audio.addEventListener("ended", function () {
     if (isRepeating == true) {
@@ -308,22 +296,5 @@ document.addEventListener("DOMContentLoaded", () => {
     isRandom = false;
     statusCheck();
     console.log(" isrepeatList:" + isrepeatList);
-  });
-
-  //設定停止 ==> 使用者輸入時間
-  setTimeBtn.addEventListener("click", function () {
-    iptTime = parseInt(setTimeIpt.value * 1000);
-    if (iptTime > 0) {
-      setTimeout(stop, iptTime);
-    }
-  });
-  function setTimeCloShow() {
-    document.getElementById("setTimeBreak").style.display = "block";
-  }
-  setTimeClo.addEventListener("click", function () {
-    function setTimeCloFun() {
-      document.getElementById("setTimeBreak").style.display = "none";
-    }
-    setTimeCloFun();
   });
 });
