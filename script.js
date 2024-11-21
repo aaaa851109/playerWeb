@@ -15,6 +15,7 @@ let currentSongIndex; // 設置初始狀態
 let wasPlaying = false; //判斷是否播放
 let iptTime = 0;
 
+//test
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.querySelector("#audio");
   const controlPanel = document.querySelector("#controlPanel");
