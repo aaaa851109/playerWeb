@@ -13,6 +13,7 @@ let isRandom = false; // 設置初始狀態為不隨機播放
 let isrepeatList = false; // 設置初始狀態為不循環歌單
 let currentSongIndex; // 設置初始狀態
 let wasPlaying = false; //判斷是否播放
+let iptTime = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.querySelector("#audio");
@@ -39,11 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const showStatus = document.querySelector("#showStatus");
   const closePop = document.querySelector("#closePop");
   const closePopPly = document.querySelector("#closePopPly");
+  const setTimeBreak = document.querySelector("#setTimeBreak");
+
+  const setTimeIpt = document.querySelector("#setTimeIpt");
+  const setTimeBtn = document.querySelector("#setTimeBtn");
+  const setTimeClo = document.querySelector("#setTimeClo");
 
   /////////////////////////////////////////////////////////////
   let timeoutId;
   function onTimeDo() {
-    console.log("滑鼠未移動超過10分鐘，執行動作");
+    console.log("滑鼠未移動超過1分鐘，執行動作");
     showPopup();
     stop();
   }
@@ -51,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("mousemove", (event) => {
     if (wasPlaying == true) {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(onTimeDo, 3000000);
+      timeoutId = setTimeout(onTimeDo, 60000); //一分鐘
     }
   });
   // 顯示彈跳視窗
@@ -74,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   audio.src = musicList[0];
   //設定 ==> 音量
   function setVolumeFun() {
-    audio.volume = setVolume.value / 1000;
+    audio.volume = setVolume.value / 100;
     showVolume.value = setVolume.value;
     if (audio.volume == 0) {
       setMute.querySelector("i").classList.remove("fa-volume-up");
@@ -137,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("判斷播放:" + wasPlaying);
     // 清除滑鼠移動計時器
     clearTimeout(timeoutId);
+    setTimeCloShow();
   }
   function play() {
     playStopBtn.querySelector("i").classList.remove("fa-play"); // 移除icon
@@ -147,12 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
       showDetailText.innerText = `正在播放 ${selectList[selectedIndex].value}`;
     }
     setInterval(() => getMusicTime(), 500);
-    // audio.addEventListener("timeupdate", getMusicTime); // 跟上面換
     console.log(progressBar.max);
     audio.play();
     updatePlayStatus();
     console.log("判斷播放:" + wasPlaying);
-    timeoutId = setTimeout(onTimeDo, 3000000);
+    timeoutId = setTimeout(onTimeDo, 60000);
   }
   playStopBtn.addEventListener("click", function () {
     if (audio.paused) {
@@ -301,5 +307,22 @@ document.addEventListener("DOMContentLoaded", () => {
     isRandom = false;
     statusCheck();
     console.log(" isrepeatList:" + isrepeatList);
+  });
+
+  //設定停止 ==> 使用者輸入時間
+  setTimeBtn.addEventListener("click", function () {
+    iptTime = parseInt(setTimeIpt.value * 1000);
+    if (iptTime > 0) {
+      setTimeout(stop, iptTime);
+    }
+  });
+  function setTimeCloShow() {
+    document.getElementById("setTimeBreak").style.display = "block";
+  }
+  setTimeClo.addEventListener("click", function () {
+    function setTimeCloFun() {
+      document.getElementById("setTimeBreak").style.display = "none";
+    }
+    setTimeCloFun();
   });
 });
