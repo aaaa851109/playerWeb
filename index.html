@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My music play list</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://kit.fontawesome.com/ac0b6d6bc8.js"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="/css/all.css" />
-  </head>
 
-  <body>
-    <audio id="audio" src="###"></audio>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>playWeb</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://kit.fontawesome.com/ac0b6d6bc8.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <audio id="audio" src="###"></audio>
+  <div class="d-flex align-items-center" style="height: 100vh">
     <div id="controlPanel" class="container text-center">
       <!-- 下拉式選單 -->
       <select id="selectList" class="">
@@ -32,12 +27,7 @@
       <div class="row">
         <div id="showDetailText">歡迎使用我的播放器</div>
         <div class="col-12">
-          <input
-            id="progressBar"
-            class="col-6 mx-auto"
-            type="range"
-            value="0"
-          />
+          <input id="progressBar" class="col-6 mx-auto" type="range" value="0" />
         </div>
         <div class="row col-6 mx-auto">
           <div id="showNowTime" class="col-6" style="text-align: left">
@@ -50,45 +40,70 @@
 
         <div id="showStatus">正常</div>
       </div>
-
-      <!-- 功能按鈕 -->
-      <div class="">
-        <button id="replayBtn" class="fa-solid fa-stop fa-2x btn"></button>
-        <button id="prevTime" class="fa-solid fa-backward fa-2x btn"></button>
-        <button
-          id="prevSong"
-          class="fa-solid fa-forward-step fa-rotate-180 fa-2x btn"
-        ></button>
-        <button id="playStopBtn" class="fa-solid fa-play fa-2x btn"></button>
-        <button
-          id="nextSong"
-          class="fa-solid fa-forward-step fa-2x btn"
-        ></button>
-        <button
-          id="nextTime"
-          class="fa-solid fa-backward fa-rotate-180 fa-2x btn"
-        ></button>
-        <button id="setMute" class="fa-solid fa-volume-up fa-2x btn"></button>
-        <button id="repeatSong" class="fa-solid fa-redo fa-2x btn"></button>
-        <button id="randomSong" class="fa-solid fa-shuffle fa-2x btn"></button>
-        <button id="repeatList" class="fa-solid fa-sync fa-2x btn"></button>
-        <button
-          id="tool"
-          class="fa-solid fa-screwdriver-wrench fa-2x btn"
-        ></button>
-      </div>
-
       <!-- 聲音功能 -->
-      <div class="">
-        <input id="setVolume" type="range" value="30" />
-        <input id="clickVolumeDown" type="button" value="-" />
-        <input id="clickVolumeUp" type="button" value="+" />
-        <input id="showVolume" type="text" readonly />
-      </div>
-    </div>
 
-    <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
-    <!-- <div id="overlay">
+      <input id="setVolume" type="range" value="30" />
+      <input id="clickVolumeDown" type="button" value="-" />
+      <input id="clickVolumeUp" type="button" value="+" />
+      <input id="showVolume" type="text" readonly />
+      <!-- 功能按鈕 一區-->
+      <div class="row  col-6 mx-auto">
+        <div class="col-4 d-flex justify-content-start">
+          <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+          <button id="repeatSong" class="fa-solid fa-redo fa-2x nbtn "></button>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+          <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn "></button>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+          <button id="repeatList" class="fa-solid fa-retweet fa-2x nbtn"></button>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+          <button id="tool" class="fa-solid fa-gear fa-2x nbtn "></button>
+        </div>
+      </div>
+  
+      
+      <!-- 功能按鈕 二區-->
+      <div class="row  col-6 mx-auto">
+        <div class="col d-flex ">
+          <button id="setMute" class="fa-solid fa-volume-up fa-2x mbtn"></button>
+        </div>
+        <div class="col d-flex ">
+          <button id="prevSong" class="fa-solid fa-forward-step fa-rotate-180 fa-2x mbtn"></button>
+        </div>
+        <div class="col d-flex ">
+          <button id="prevTime" class="fa-solid fa-backward fa-2x mbtn"></button>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <div class="out-circle">
+            <div class="in-circle">
+              <button id="playStopBtn" class="fa-solid fa-play fa-2x sbtn"></button>
+            </div>
+          </div>
+        </div>
+        <div class="col d-flex justify-content-end">
+          <button id="nextTime" class="fa-solid fa-backward fa-rotate-180 fa-2x mbtn"></button>
+        </div>
+        <div class="col d-flex justify-content-end">
+          <button id="nextSong" class="fa-solid fa-forward-step fa-2x mbtn"></button>
+        </div>
+        <div class="col d-flex justify-content-end">
+          <button id="replayBtn" class="fa-solid fa-stop fa-2x mbtn"></button>
+        </div>
+      </div>
+      <!-- test section -->
+      <div class="takeTurm">
+        <button id="inOrderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
+        <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn" style="display: none"></button>
+        <button id="repeatSong" class="fa-solid fa-redo fa-2x nbtn "style="display: none"></button>
+      </div>
+      
+
+      <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
+      <!-- <div id="overlay">
       <div id="popup">
         <h2>閒置過久</h2>
         <p>請問要繼續播放嗎?</p>
@@ -96,7 +111,8 @@
         <button id="closePopPly">播放</button>
       </div>
     </div> -->
-
+    </div>
     <script src="script.js"></script>
-  </body>
+</body>
+
 </html>

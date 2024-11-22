@@ -1,0 +1,63 @@
+*{
+  padding: 0 !important;
+}
+
+body {
+  background: linear-gradient(to top, #0D1C26 30%, #050B0F);
+  height: 100vh; /* 設定全螢幕高度 */
+  margin: 0;
+  color: white;
+
+}
+.nbtn{
+  color:#8F8F8F;
+  background-color: transparent;
+  border: none;
+}
+
+.mbtn{
+  color: #5FC3B4;  
+  background-color: transparent;
+border: none;
+
+}
+.mbtn:hover ,.nbtn:hover{
+    color: #D9D957;
+}
+
+
+
+.out-circle{
+  width: 120px;
+  height: 120px;
+  position: relative;
+  background: linear-gradient(to top, hsl(154, 44%, 57%,0.4) 50%, hsl(187, 56%, 59%,0.4));
+  border-radius: 50%;
+}
+.in-circle{
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top:12.5%;
+  left: 12.5%;
+  background: linear-gradient(to top, hsl(154, 44%, 57%) 50%, hsl(187, 56%, 59%));
+  border-radius: 50%;
+}
+.sbtn{
+  color: black;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 32.5%;
+  right: 32.5%;
+  /* right: 35%; */
+}
+
+.out-circle:hover{
+  background-color: hsl(60, 63%, 60%,0.4);
+ 
+}
+.in-circle:hover{
+  background: hsl(60, 63%, 60%);
+ 
+}

@@ -6,8 +6,9 @@ const musicList = [
 ];
 
 let selectedIndex = 0;
-let randomIndex = 0;
+let currentIndex = 0;
 let selectedIndexInnerText = ""; //歌曲名稱
+let inOrder = true;
 let isRepeating = false; // 設置初始狀態為不重複播放
 let isRandom = false; // 設置初始狀態為不隨機播放
 let isrepeatList = false; // 設置初始狀態為不循環歌單
@@ -20,7 +21,7 @@ let iptTime = 0;
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.querySelector("#audio");
   const controlPanel = document.querySelector("#controlPanel");
-  const selectList = document.querySelector("#selectList");
+  const selectList = document.querySelector("#selectList"); //抓下拉式選單value抓值
   const playStopBtn = document.querySelector("#playStopBtn");
   const replayBtn = document.querySelector("#replayBtn");
   const prevTime = document.querySelector("#prevTime");
@@ -28,9 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextSong = document.querySelector("#nextSong");
   const nextTime = document.querySelector("#nextTime");
   const setMute = document.querySelector("#setMute");
+  const inOrderSong = document.querySelector("#inOrderSong");
   const repeatSong = document.querySelector("#repeatSong");
   const randomSong = document.querySelector("#randomSong");
   const repeatList = document.querySelector("#repeatList");
+  const takeTurm = document.querySelector("#takeTurm");
   const tool = document.querySelector("#tool");
   const setVolume = document.querySelector("#setVolume");
   const clickVolumeUp = document.querySelector("#clickVolumeUp");
@@ -87,9 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
   //更換靜音圖示
   function mute() {
     if (audio.muted || audio.volume == 0) {
-      setMute.setAttribute("class", "fa-solid fa-volume-xmark fa-2x btn");
+      setMute.setAttribute("class", "fa-solid fa-volume-xmark fa-2x mbtn");
     } else {
-      setMute.setAttribute("class", "fa-solid fa-volume-up fa-2x btn");
+      setMute.setAttribute("class", "fa-solid fa-volume-up fa-2x mbtn");
     }
   }
   //靜音 ==> 切換
@@ -140,9 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function updatePlayStatus() {
     wasPlaying = !audio.paused; // 更新播放狀態
     if (wasPlaying == true) {
-      playStopBtn.setAttribute("class", "fa-solid fa-pause fa-2x btn");
+      playStopBtn.setAttribute("class", "fa-solid fa-pause fa-2x sbtn");
     } else {
-      playStopBtn.setAttribute("class", "fa-solid fa-play fa-2x btn");
+      playStopBtn.setAttribute("class", "fa-solid fa-play fa-2x sbtn");
     }
     console.log("判斷播放:" + wasPlaying);
   }
@@ -155,11 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // clearTimeout(timeoutId);
   }
   function play() {
-    if (isRandom == true) {
-      showDetailText.innerText = `正在播放 ${selectList[randomIndex].value}`;
-    } else {
-      showDetailText.innerText = `正在播放 ${selectList[selectedIndex].value}`;
-    }
+    showDetailText.innerText = `正在播放 ${selectList[currentIndex].value}`;
     setInterval(() => getMusicTime(), 500);
     //////////////////////////////////////
     audio.play();
@@ -219,82 +218,120 @@ document.addEventListener("DOMContentLoaded", () => {
   //選單切換 ==> 歌曲
   selectList.addEventListener("change", function (event) {
     updatePlayStatus();
-    console.log(event);
     selectedIndex = event.target.selectedIndex;
     selectedIndexInnerText = event.target.options[selectedIndex].text;
-    audio.src = musicList[selectedIndex]; //抓使用者選到的選項value屬值
+    audio.src = musicList[selectedIndex];
+    currentIndex = selectedIndex;
     if (wasPlaying) {
       play();
     }
   });
   //=========================================================================
-  // 播放結束 ==> 判斷行為
-  audio.addEventListener("ended", function () {
-    if (isRepeating == true) {
-      audio.currentTime = 0;
-      audio.play();
-    } else if (isRandom == true) {
-      randomIndex = Math.floor(Math.random() * musicList.length);
-      selectList.value = selectList[randomIndex].value;
-      audio.src = musicList[randomIndex];
-      console.log(randomIndex);
-      play();
-    } else {
-      musicStatus();
-    }
-  });
-
-  //音樂結束，播放下一首歌，直到最後一首
-  function musicStatus() {
-    if (selectedIndex + 1 == musicList.length && isrepeatList == true) {
-      selectedIndex = 0;
-      selectList.value = selectList[selectedIndex].value;
-      audio.src = musicList[selectedIndex];
-      play();
-    } else if (selectedIndex + 1 == musicList.length) {
-      stop();
-      audio.currentTime = 0; // 時間歸零
-    } else {
-      selectedIndex += 1;
-      audio.src = musicList[selectedIndex];
-      selectList.value = selectList[selectedIndex].value;
-      console.log(selectedIndexInnerText);
-      play();
-    }
-  }
 
   function statusCheck() {
     if (isRepeating == false && isRandom == false && isrepeatList == false) {
       showStatus.innerText = "正常";
     }
   }
+
+  //=====================================================
+
   //單曲循環
   repeatSong.addEventListener("click", function () {
     showStatus.innerText = "單曲循環";
     isRepeating = !isRepeating;
     isRandom = false;
     isrepeatList = false;
+    inOrder = false;
     statusCheck();
     console.log("isRepeating:" + isRepeating);
   });
+  //隨機清單
+  // randomSong.addEventListener("click", function () {
+  //   isRandom = !isRandom;
 
-  //隨機播放 ==> 歌單
-  randomSong.addEventListener("click", function () {
-    showStatus.innerText = "隨機播放";
-    isRandom = !isRandom;
-    isRepeating = false;
-    isrepeatList = false;
-    statusCheck();
-    console.log("isRandom:" + isRandom);
-  });
+  //   if (isRandom == true) {
+  //     const indices = Array.from({ length: musicList.length }, (_, i) => i);
+  //     for (let i = indices.length - 1; i > 0; i--) {
+  //       const j = Math.floor(Math.random() * (i + 1));
+  //       [indices[i], indices[j]] = [indices[j], indices[i]]; // 交換元素
+  //     }
+  //     console.log(indices + "new arr");
+  //     let randomIndex = indices[currentIndex];
+  //     console.log(randomIndex + " indices[0]");
+  //     selectList.value = selectList[randomIndex].value;
+  //     audio.src = musicList[randomIndex];
+  //     currentIndex = (currentIndex + 1) % indices.length; // 確保索引循環
+  //   } else {
+  //     currentIndex = 0;
+  //   }
 
-  //循環 ==> 歌單
+  //   showStatus.innerText = "隨機播放";
+  //   isRepeating = false;
+  //   isrepeatList = false;
+  //   inOrder = false;
+  //   statusCheck();
+  //   console.log("isRandom:" + isRandom);
+  // });
+
+  // 清單循環
   repeatList.addEventListener("click", function () {
     showStatus.innerText = "歌單循環";
     isrepeatList = !isrepeatList;
     isRepeating = false;
     isRandom = false;
+    inOrder = false;
+
     statusCheck();
     console.log(" isrepeatList:" + isrepeatList);
   });
+
+  //隨機清單  +  清單循環
+
+  //清單正常
+  inOrderSong.addEventListener("click", function () {
+    showStatus.innerText = "正常";
+    inOrder = true;
+    isRepeating = false;
+    isRandom = false;
+    isrepeatList = false;
+    statusCheck();
+    console.log("isRepeating:" + isRepeating);
+    defaultSong();
+    play();
+  });
+  //========================================================
+  // 播放結束 ==> 判斷行為
+  audio.addEventListener("ended", function () {
+    if (isRepeating == true) {
+      audio.currentTime = 0;
+      audio.play();
+    } else if (isRandom == true && isrepeatList == true) {
+    } else if (isRandom == true) {
+    } else if (isrepeatList == true) {
+      console.log(typeof selectedIndex, selectedIndex);
+      defaultSong();
+      console.log(typeof musicList.length, musicList.length);
+      if (selectedIndex + 1 == musicList.length) {
+        selectedIndex = 0;
+      }
+    } else {
+      if (selectedIndex + 1 == musicList.length) {
+        stop();
+        audio.currentTime = 0; // 時間歸零
+      } else {
+        defaultSong();
+      }
+    }
+  });
+  //音樂結束，播放下一首歌，最後一首停
+  function defaultSong() {
+    selectedIndex += 1;
+    audio.src = musicList[selectedIndex];
+    selectList.value = selectList[selectedIndex].value;
+    currentIndex = selectedIndex;
+    console.log(selectedIndexInnerText);
+    play();
+  }
+  //=====================================================================
 });
