@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <audio id="audio" src="###" controls></audio>
+  <audio id="audio" src="###"></audio>
   <div class="d-flex align-items-center" style="height: 100vh">
     <div id="controlPanel" class="container text-center">
 
@@ -38,17 +38,23 @@
 
         <div id="showStatus">依序播放</div>
       </div>
-      <!-- 聲音功能 -->
 
-      <input id="setVolume" type="range" value="30" />
-      <input id="clickVolumeDown" type="button" value="-" />
-      <input id="clickVolumeUp" type="button" value="+" />
-      <input id="showVolume" type="text" readonly />
       <!-- 功能按鈕 一區-->
-      <div class="row  col-6 mx-auto">
+      <div class="row  col-6 mx-auto mar">
         <!-- <div class="selectBtn"> -->
         <div class="col-2 d-flex justify-content-start">
           <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
+          <div id="overlayList">
+            <div id="popupList" class="row">
+              <div id="popupListUp"></div>
+              <div class="custom-hr"></div>
+              <div class="popListFun">
+                <button id="addPopList" class="addPopList">＋新增歌曲</button>
+                <button id="closePopList" class="closePopList">取消</button>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div class="col-2 d-flex justify-content-start">
           <button id="orderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
@@ -68,11 +74,24 @@
         </div>
       </div>
 
-
       <!-- 功能按鈕 二區-->
-      <div class="row  col-6 mx-auto">
+      <div class="row  col-6 mx-auto mar">
         <div class="col d-flex ">
           <button id="setMute" class="fa-solid fa-volume-up fa-2x mbtn"></button>
+          <!-- 彈出視窗 -->
+          <div id="popupWindow" class="volumePopup">
+            <input id="showVolume" type="text" class="text" readonly />
+
+            <button id="clickVolumeUp" class="ipt">
+              <i class="fa-solid fa-plus "></i>
+            </button>
+            <div class="cen">
+              <input id="setVolume" type="range" value="30" />
+            </div>
+            <button id="clickVolumeDown" class="ipt">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+          </div>
         </div>
         <div class="col d-flex ">
           <button id="prevSong" class="fa-solid fa-forward-step fa-rotate-180 fa-2x mbtn"></button>
@@ -81,7 +100,7 @@
           <button id="prevTime" class="fa-solid fa-backward fa-2x mbtn"></button>
         </div>
         <div class="col d-flex justify-content-center">
-          <img id="playStopBtn" class="sbtn" src="play.svg" alt="Play Button" />
+          <img id="playStopBtn" class="sbtn" src="files/play_top_icon/play.svg" alt="Play Button" />
         </div>
         <div class="col d-flex justify-content-end">
           <button id="nextTime" class="fa-solid fa-backward fa-rotate-180 fa-2x mbtn"></button>
@@ -96,14 +115,16 @@
 
 
       <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
-      <!-- <div id="overlay">
-      <div id="popup">
-        <h2>閒置過久</h2>
-        <p>請問要繼續播放嗎?</p>
-        <button id="closePop">暫停</button>
-        <button id="closePopPly">播放</button>
+      <div id="overlay">
+        <div id="popup">
+          <h2>閒置過久</h2>
+          <p>請問要繼續播放嗎?</p>
+          <button id="closePop">暫停</button>
+          <button id="closePopPly">播放</button>
+        </div>
       </div>
-    </div> -->
+
+
     </div>
 
     <script src="script.js"></script>

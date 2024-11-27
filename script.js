@@ -1,25 +1,26 @@
-const musicList = [
+let musicList = [
   {
     id: 0,
     title: "蕭秉治-毒藥",
-    src: "music/poison.mp3",
+    src: "files/music/poison.mp3",
   },
   {
     id: 1,
     title: "謝和弦-你是真的離開我",
-    src: "music/leave.mp3",
+    src: "files/music/leave.mp3",
   },
   {
     id: 2,
     title: "陳壹千-仗著",
-    src: "music/relyon.mp3",
+    src: "files/music/relyon.mp3",
   },
   {
     id: 3,
     title: "怕胖團-魚",
-    src: "music/fish.mp3",
+    src: "files/music/fish.mp3",
   },
 ];
+let newMusicList = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   const selectElement = document.querySelector("#selectElement");
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const audio = document.querySelector("#audio");
   const playStopBtn = document.querySelector("#playStopBtn");
-  // const playStopImg = document.querySelector("img");
+  const playStopImg = document.querySelector("img");
   const replayBtn = document.querySelector("#replayBtn");
   const prevTime = document.querySelector("#prevTime");
   const prevSong = document.querySelector("#prevSong");
@@ -40,10 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextTime = document.querySelector("#nextTime");
   const setMute = document.querySelector("#setMute");
   const buttons = document.querySelectorAll(".nbtn");
-  const orderSong = document.querySelector("#orderSong");
-  const repeatSong = document.querySelector("#repeatSong");
-  const randomSong = document.querySelector("#randomSong");
-  const repeatList = document.querySelector("#repeatList");
+  // const orderSong = document.querySelector("#orderSong");
+  // const repeatSong = document.querySelector("#repeatSong");
+  // const randomSong = document.querySelector("#randomSong");
+  // const repeatList = document.querySelector("#repeatList");
   const tool = document.querySelector("#tool");
   const setVolume = document.querySelector("#setVolume");
   const clickVolumeUp = document.querySelector("#clickVolumeUp");
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const showStatus = document.querySelector("#showStatus");
   const closePop = document.querySelector("#closePop");
   const closePopPly = document.querySelector("#closePopPly");
+  const closePopList = document.querySelector("#closePopList");
 
   //選單切換 ==> 歌曲
   let tempTitle = "";
@@ -134,9 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function updatePlayStatus() {
     wasPlaying = !audio.paused; // 更新播放狀態
     if (wasPlaying == true) {
-      playStopBtn.src = "pause.svg";
+      playStopBtn.src = "files/play_top_icon/pause.svg";
     } else {
-      playStopBtn.src = "play.svg";
+      playStopBtn.src = "files/play_top_icon/play.svg";
     }
     console.log("判斷播放:" + wasPlaying);
   }
@@ -160,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => getMusicTime(), 500);
     audio.play();
     updatePlayStatus();
-    timeoutId = setTimeout(onTimeDo, 60000);
+    timeoutId = setTimeout(onTimeDo, time);
   }
   playStopBtn.addEventListener("click", function () {
     if (audio.paused) {
@@ -258,6 +260,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let reapeatMode = false;
   let temp = "";
   const functions = {
+    list: () => {
+      showPopupList();
+    },
     orderSong: () => {
       if (reapeatMode === false) {
         currentMode = "orderSong";
@@ -408,6 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //=====================================================================
 
   let timeoutId;
+  let time = 60000;
   function onTimeDo() {
     console.log("滑鼠未移動超過1分鐘，執行動作");
     showPopup();
@@ -417,7 +423,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("mousemove", (event) => {
     if (wasPlaying == true) {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(onTimeDo, 1000); //一分鐘
+      timeoutId = setTimeout(onTimeDo, time);
     }
   });
 
@@ -435,5 +441,59 @@ document.addEventListener("DOMContentLoaded", () => {
   closePopPly.addEventListener("click", function () {
     closePopup();
     play();
+  });
+
+  // ======================================================
+
+  function showPopupList() {
+    document.getElementById("overlayList").style.display = "flex";
+  }
+  // 關閉彈跳視窗
+  function closePopupList() {
+    document.getElementById("overlayList").style.display = "none";
+  }
+  closePopList.addEventListener("click", closePopupList);
+
+  for (let i = 0; i < musicList.length; i++) {
+    let contentSong = document.createElement("div");
+    contentSong.id = "contentSong";
+    contentSong.classList.add("contentSong");
+    contentSong.innerHTML = `<div>${musicList[i].title}</div>`;
+    document.querySelector("#popupListUp").appendChild(contentSong);
+  }
+
+  // ======================================================
+  const popupWindow = document.getElementById("popupWindow");
+  // 當滑鼠移到按鈕上時，顯示彈出視窗
+  setMute.addEventListener("mouseenter", () => {
+    const rect = setMute.getBoundingClientRect();
+    popupWindow.style.top = `${rect.top - popupWindow.offsetHeight}px`;
+    popupWindow.style.left = `${
+      rect.left + rect.width / 2 - popupWindow.offsetWidth / 2
+    }px`;
+    popupWindow.classList.remove("hidden");
+    popupWindow.classList.add("show");
+  });
+
+  // 當滑鼠移出按鈕時，隱藏彈出視窗
+  setMute.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+      if (!popupWindow.matches(":hover")) {
+        // 檢查滑鼠是否在彈出視窗內
+        popupWindow.classList.remove("show");
+        popupWindow.classList.add("hidden");
+      }
+    }, 100);
+  });
+  // 當滑鼠進入彈出視窗時，保持顯示
+  popupWindow.addEventListener("mouseenter", () => {
+    popupWindow.classList.remove("hidden");
+    popupWindow.classList.add("show");
+  });
+
+  // 當滑鼠移出彈出視窗時，隱藏視窗
+  popupWindow.addEventListener("mouseleave", () => {
+    popupWindow.classList.remove("show");
+    popupWindow.classList.add("hidden");
   });
 });
