@@ -12,15 +12,13 @@
 </head>
 
 <body>
-  <audio id="audio" src="###"></audio>
+  <audio id="audio" src="###" controls></audio>
   <div class="d-flex align-items-center" style="height: 100vh">
     <div id="controlPanel" class="container text-center">
+
       <!-- 下拉式選單 -->
-      <select id="selectList" class="">
-        <option value="蕭秉治-毒藥">蕭秉治-毒藥</option>
-        <option value="謝和弦-你是真的離開我">謝和弦-你是真的離開我</option>
-        <option value="陳壹千-仗著">陳壹千-仗著</option>
-        <option value="怕胖團-魚">怕胖團-魚</option>
+      <select id="selectElement">
+        <!-- js 生成資料 -->
       </select>
 
       <!-- 曲目歌手進度條 -->
@@ -38,7 +36,7 @@
           </div>
         </div>
 
-        <div id="showStatus">正常</div>
+        <div id="showStatus">依序播放</div>
       </div>
       <!-- 聲音功能 -->
 
@@ -48,8 +46,12 @@
       <input id="showVolume" type="text" readonly />
       <!-- 功能按鈕 一區-->
       <div class="row  col-6 mx-auto">
-        <div class="col-4 d-flex justify-content-start">
+        <!-- <div class="selectBtn"> -->
+        <div class="col-2 d-flex justify-content-start">
           <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
+        </div>
+        <div class="col-2 d-flex justify-content-start">
+          <button id="orderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
         </div>
         <div class="col-2 d-flex justify-content-end">
           <button id="repeatSong" class="fa-solid fa-redo fa-2x nbtn "></button>
@@ -57,6 +59,7 @@
         <div class="col-2 d-flex justify-content-end">
           <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn "></button>
         </div>
+        <!-- </div> -->
         <div class="col-2 d-flex justify-content-end">
           <button id="repeatList" class="fa-solid fa-retweet fa-2x nbtn"></button>
         </div>
@@ -64,8 +67,8 @@
           <button id="tool" class="fa-solid fa-gear fa-2x nbtn "></button>
         </div>
       </div>
-  
-      
+
+
       <!-- 功能按鈕 二區-->
       <div class="row  col-6 mx-auto">
         <div class="col d-flex ">
@@ -78,11 +81,7 @@
           <button id="prevTime" class="fa-solid fa-backward fa-2x mbtn"></button>
         </div>
         <div class="col d-flex justify-content-center">
-          <div class="out-circle">
-            <div class="in-circle">
-              <button id="playStopBtn" class="fa-solid fa-play fa-2x sbtn"></button>
-            </div>
-          </div>
+          <img id="playStopBtn" class="sbtn" src="play.svg" alt="Play Button" />
         </div>
         <div class="col d-flex justify-content-end">
           <button id="nextTime" class="fa-solid fa-backward fa-rotate-180 fa-2x mbtn"></button>
@@ -94,13 +93,7 @@
           <button id="replayBtn" class="fa-solid fa-stop fa-2x mbtn"></button>
         </div>
       </div>
-      <!-- test section -->
-      <div class="takeTurm">
-        <button id="inOrderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
-        <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn" style="display: none"></button>
-        <button id="repeatSong" class="fa-solid fa-redo fa-2x nbtn "style="display: none"></button>
-      </div>
-      
+
 
       <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
       <!-- <div id="overlay">
@@ -112,6 +105,7 @@
       </div>
     </div> -->
     </div>
+
     <script src="script.js"></script>
 </body>
 
