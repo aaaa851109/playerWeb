@@ -25,7 +25,7 @@
       <div class="row">
         <div id="showDetailText" style="cursor: default;">歡迎使用我的播放器</div>
         <div class="col-12">
-          <input id="progressBar" class="col-6 mx-auto" type="range" value="0" />
+          <input id="progressBar" class="col-6 mx-auto " type="range" value="0" />
         </div>
         <div class="row col-6 mx-auto">
           <div id="showNowTime" class="col-6" style="text-align: left">
@@ -56,7 +56,9 @@
           </div>
 
         </div>
-        <div class="col-2 d-flex justify-content-start">
+
+        <!-- 整合 -->
+        <div class="col-2 d-flex justify-content-start ">
           <button id="orderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
         </div>
         <div class="col-2 d-flex justify-content-end">
@@ -65,7 +67,7 @@
         <div class="col-2 d-flex justify-content-end">
           <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn "></button>
         </div>
-        <!-- </div> -->
+        <!-- 整合 -->
         <div class="col-2 d-flex justify-content-end">
           <button id="repeatList" class="fa-solid fa-retweet fa-2x nbtn"></button>
         </div>
@@ -81,7 +83,6 @@
           <!-- 彈出視窗 -->
           <div id="popupWindow" class="volumePopup">
             <input id="showVolume" type="text" class="text" readonly />
-
             <button id="clickVolumeUp" class="ipt">
               <i class="fa-solid fa-plus "></i>
             </button>

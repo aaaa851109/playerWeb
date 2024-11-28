@@ -27,7 +27,10 @@ body {
 .mbtn:hover ,.nbtn:hover{
     color: #D9D957;
 }
+.form-range{
 
+
+}
 .sbtn{
   cursor: pointer;
   border-radius: 50%;
@@ -64,9 +67,24 @@ body {
   margin: 20px 0;
 }
 #setVolume {
+  -webkit-appearance: none; 
+  appearance: none;
   writing-mode: bt-lr;
   transform: rotate(270deg); 
   width: 120px;
+  outline: none; /* 去掉邊框 */
+  /* background: #8f8f8f;  */
+  background: #5dc4d1; /* 滑塊顏色 */
+  height: 5px;
+}
+#setVolume::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+
+  background: #5dc4d1; /* 滑塊顏色 */
+  border-radius: 50%; /* 圓形滑塊 */
+  cursor: pointer;
 }
 /* ================================== */
 #overlayList {

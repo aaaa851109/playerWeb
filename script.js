@@ -342,8 +342,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let ranIndex = 0;
   audio.addEventListener("ended", function () {
     if (currentMode === "repeatSong") {
-      console.log(123123123123);
-      console.log(temp);
       audio.src = temp;
       if (wasPlaying) {
         play();
@@ -424,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //=====================================================================
 
   let timeoutId;
-  let time = 5000;
+  let time = 30000;
   function onTimeDo() {
     console.log("滑鼠未移動超過1分鐘，執行動作");
     showPopup();
