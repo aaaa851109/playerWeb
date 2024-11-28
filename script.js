@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const closePop = document.querySelector("#closePop");
   const closePopPly = document.querySelector("#closePopPly");
   const closePopList = document.querySelector("#closePopList");
+  const overlayList = document.getElementById("overlayList");
+  const popupList = document.getElementById("popupList");
 
   //選單切換 ==> 歌曲
   let tempTitle = "";
@@ -262,6 +264,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const functions = {
     list: () => {
       showPopupList();
+      document.addEventListener("click", (event) => {
+        if (
+          overlayList.style.display === "flex" && // 確保彈窗顯示中
+          !popupList.contains(event.target) && // 點擊不在彈窗內部
+          event.target !== list // 排除顯示按鈕本身
+        ) {
+          closePopupList();
+        }
+      });
     },
     orderSong: () => {
       if (reapeatMode === false) {
@@ -446,11 +457,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ======================================================
 
   function showPopupList() {
-    document.getElementById("overlayList").style.display = "flex";
+    overlayList.style.display = "flex";
   }
-  // 關閉彈跳視窗
   function closePopupList() {
-    document.getElementById("overlayList").style.display = "none";
+    overlayList.style.display = "none";
   }
   closePopList.addEventListener("click", closePopupList);
 
