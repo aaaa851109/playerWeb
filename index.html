@@ -23,7 +23,7 @@
 
       <!-- 曲目歌手進度條 -->
       <div class="row">
-        <div id="showDetailText">歡迎使用我的播放器</div>
+        <div id="showDetailText" style="cursor: default;">歡迎使用我的播放器</div>
         <div class="col-12">
           <input id="progressBar" class="col-6 mx-auto" type="range" value="0" />
         </div>
@@ -36,21 +36,21 @@
           </div>
         </div>
 
-        <div id="showStatus">依序播放</div>
+        <div id="showStatus" style="cursor: default;">依序播放</div>
       </div>
 
       <!-- 功能按鈕 一區-->
-      <div class="row  col-6 mx-auto mar">
+      <div class="row  col-6 mx-auto">
         <!-- <div class="selectBtn"> -->
         <div class="col-2 d-flex justify-content-start">
           <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
-          <div id="overlayList">
-            <div id="popupList" class="row">
-              <div id="popupListUp"></div>
+          <div id="overlayList" class="justify-content-center align-items-center">
+            <div id="popupList" class="row ">
+              <div id="popupListUp" class="px-3 py-3 "></div>
               <div class="custom-hr"></div>
-              <div class="popListFun">
-                <button id="addPopList" class="addPopList">＋新增歌曲</button>
-                <button id="closePopList" class="closePopList">取消</button>
+              <div class=" d-flex justify-content-between px-3 py-2">
+                <button id="addPopList">＋新增歌曲</button>
+                <button id="closePopList">取消</button>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
       </div>
 
       <!-- 功能按鈕 二區-->
-      <div class="row  col-6 mx-auto mar">
+      <div class="row  col-6 mx-auto align-items-center">
         <div class="col d-flex ">
           <button id="setMute" class="fa-solid fa-volume-up fa-2x mbtn"></button>
           <!-- 彈出視窗 -->

@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //=====================================================================
 
   let timeoutId;
-  let time = 60000;
+  let time = 5000;
   function onTimeDo() {
     console.log("滑鼠未移動超過1分鐘，執行動作");
     showPopup();
@@ -456,11 +456,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   for (let i = 0; i < musicList.length; i++) {
     let contentSong = document.createElement("div");
+    let xmark = document.createElement("i");
+    let box = document.createElement("div");
     contentSong.id = "contentSong";
+    xmark.id = "xmark";
+    box.id = "box";
     contentSong.classList.add("contentSong");
+    xmark.classList.add("xmark");
+    box.classList.add("box");
     contentSong.innerHTML = `<div>${musicList[i].title}</div>`;
-    document.querySelector("#popupListUp").appendChild(contentSong);
+    xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    box.appendChild(contentSong);
+    box.appendChild(xmark);
+    document.querySelector("#popupListUp").appendChild(box);
   }
+  // 為每個 box 添加事件監聽
+  const boxes = document.querySelectorAll(".box");
+  boxes.forEach((box) => {
+    box.addEventListener("mouseenter", () => {
+      const children = box.querySelectorAll("*");
+      children.forEach((child) => {
+        child.style.color = "#FFD700 ";
+      });
+    });
+    box.addEventListener("mouseleave", () => {
+      const children = box.querySelectorAll("*");
+      children.forEach((child) => {
+        child.style.color = "";
+      });
+    });
+  });
 
   // ======================================================
   const popupWindow = document.getElementById("popupWindow");
