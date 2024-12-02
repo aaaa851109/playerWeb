@@ -13,41 +13,51 @@
 
 <body>
   <audio id="audio" src="###"></audio>
-  <div class="d-flex align-items-center" style="height: 100vh">
+  <div class="d-flex align-items-center" style="height: 80vh">
     <div id="controlPanel" class="container text-center">
 
-      <!-- 下拉式選單 -->
-      <select id="selectElement">
-        <!-- js 生成資料 -->
-      </select>
+      <!-- <div class="d-flex align-items-center justify-content-center col-6 mx-auto mb-3">
+        <select id="selectElement" class="col-8 h1">
 
-      <!-- 曲目歌手進度條 -->
-      <div class="row">
-        <div id="showDetailText" style="cursor: default;">歡迎使用我的播放器</div>
-        <div class="col-12">
-          <input id="progressBar" class="col-6 mx-auto " type="range" value="0" />
+        </select>
+        <div class="arrow">
+          <i class="fa-solid fa-caret-up fa-rotate-180 fa-2x"></i>
         </div>
-        <div class="row col-6 mx-auto">
-          <div id="showNowTime" class="col-6" style="text-align: left">
-            00:00
-          </div>
-          <div id="showSongTime" class="col-6" style="text-align: right">
-            00:00
-          </div>
+      </div> -->
+      <div class="select-wrapper mb-3">
+        <select id="selectElement" class="h1">
+        </select>
+        <div class="arrow">
+          <i class="fa-solid fa-caret-up fa-rotate-180 fa-2x" aria-hidden="true"></i>
         </div>
+      </div>
 
-        <div id="showStatus" style="cursor: default;">依序播放</div>
+
+      <div id="sinGer" class="d-flex justify-content-center align-items-center col-6 mx-auto mb-4 h3">蕭秉治</div>
+      <div class="d-flex justify-content-center align-items-center col-6 mx-auto mb-2">
+        <div id="showNowTime" class="text-start" style="flex: 1;">
+          00:00
+        </div>
+        <input id="progressBar" min="0" max="100" style="flex: 8;" type="range" value="0" />
+        <div id="showSongTime" class="text-end" style="flex: 1;">
+          00:00
+        </div>
+      </div>
+      <div class="d-flex justify-content-center mb-3 showDet">
+        <div class="col-3 text-start" id="showDetailText">歡迎使用我的播放器</div>
+        <div class="col-3 text-end" id="showStatus">依序播放</div>
       </div>
 
       <!-- 功能按鈕 一區-->
-      <div class="row  col-6 mx-auto">
-        <!-- <div class="selectBtn"> -->
-        <div class="col-2 d-flex justify-content-start">
+      <div class="row col-6 mx-auto">
+        <div class="col d-flex justify-content-start">
           <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
+          <!-- list 點選彈出視窗 -->
           <div id="overlayList" class="justify-content-center align-items-center">
             <div id="popupList" class="row ">
               <div id="popupListUp" class="px-3 py-3 "></div>
               <div class="custom-hr"></div>
+              <div id="popupListDown" class="px-3 py-3 "></div>
               <div class=" d-flex justify-content-between px-3 py-2">
                 <button id="addPopList">＋新增歌曲</button>
                 <button id="closePopList">取消</button>
@@ -56,30 +66,35 @@
           </div>
 
         </div>
-
-        <!-- 整合 -->
-        <div class="col-2 d-flex justify-content-start ">
-          <button id="orderSong" class="fa-solid fa-right-long fa-2x nbtn"></button>
+        <div id="carousel" class="col col-md-auto">
+          <button id="carouselButton" class="fa-solid fa-right-long fa-2x nbtn"></button>
         </div>
-        <div class="col-2 d-flex justify-content-end">
-          <button id="repeatSong" class="fa-solid fa-redo fa-2x nbtn "></button>
-        </div>
-        <div class="col-2 d-flex justify-content-end">
-          <button id="randomSong" class="fa-solid fa-shuffle fa-2x nbtn "></button>
-        </div>
-        <!-- 整合 -->
-        <div class="col-2 d-flex justify-content-end">
+        <div class="col col-md-auto ps-4">
           <button id="repeatList" class="fa-solid fa-retweet fa-2x nbtn"></button>
         </div>
-        <div class="col-2 d-flex justify-content-end">
+        <div class="col col-md-auto ps-4">
           <button id="tool" class="fa-solid fa-gear fa-2x nbtn "></button>
+
+          <!-- tool 點選彈出視窗 -->
+          <div id="overlayTool" class="overlay">
+            <div id="popupTool" class="popup">
+              <h2>設定閒置</h2>
+              <p>請輸入計時時間秒數</p>
+              <input type="number" value="" id="setTool" placeholder="30">
+              <button id="closePopSet">確定</button>
+              <button id="closePopTool">取消</button>
+            </div>
+          </div>
+
         </div>
       </div>
+
 
       <!-- 功能按鈕 二區-->
       <div class="row  col-6 mx-auto align-items-center">
         <div class="col d-flex ">
           <button id="setMute" class="fa-solid fa-volume-up fa-2x mbtn"></button>
+
           <!-- 彈出視窗 -->
           <div id="popupWindow" class="volumePopup">
             <input id="showVolume" type="text" class="text" readonly />
@@ -87,12 +102,13 @@
               <i class="fa-solid fa-plus "></i>
             </button>
             <div class="cen">
-              <input id="setVolume" type="range" value="30" />
+              <input id="setVolume" min="0" max="100" type="range" value="50" />
             </div>
             <button id="clickVolumeDown" class="ipt">
               <i class="fa-solid fa-minus"></i>
             </button>
           </div>
+
         </div>
         <div class="col d-flex ">
           <button id="prevSong" class="fa-solid fa-forward-step fa-rotate-180 fa-2x mbtn"></button>
@@ -114,10 +130,9 @@
         </div>
       </div>
 
-
       <!-- 彈跳視窗 ==> 滑鼠未移動過久 -->
-      <div id="overlay">
-        <div id="popup">
+      <div id="overlay" class="overlay">
+        <div id="popup" class="popup">
           <h2>閒置過久</h2>
           <p>請問要繼續播放嗎?</p>
           <button id="closePop">暫停</button>
@@ -126,9 +141,8 @@
       </div>
 
 
-    </div>
+      <script src="script.js"></script>
 
-    <script src="script.js"></script>
 </body>
 
 </html>

@@ -1,23 +1,27 @@
 let musicList = [
   {
     id: 0,
-    title: "蕭秉治-毒藥",
+    title: "毒藥",
     src: "files/music/poison.mp3",
+    singer: "蕭秉治",
   },
   {
     id: 1,
-    title: "謝和弦-你是真的離開我",
+    title: "你是真的離開我",
     src: "files/music/leave.mp3",
+    singer: "謝和弦",
   },
   {
     id: 2,
-    title: "陳壹千-仗著",
+    title: "仗著",
     src: "files/music/relyon.mp3",
+    singer: "陳壹千",
   },
   {
     id: 3,
-    title: "怕胖團-魚",
+    title: "魚",
     src: "files/music/fish.mp3",
+    singer: "怕胖團",
   },
 ];
 let newMusicList = [];
@@ -33,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const audio = document.querySelector("#audio");
   const playStopBtn = document.querySelector("#playStopBtn");
-  const playStopImg = document.querySelector("img");
   const replayBtn = document.querySelector("#replayBtn");
   const prevTime = document.querySelector("#prevTime");
   const prevSong = document.querySelector("#prevSong");
@@ -44,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // const orderSong = document.querySelector("#orderSong");
   // const repeatSong = document.querySelector("#repeatSong");
   // const randomSong = document.querySelector("#randomSong");
-  // const repeatList = document.querySelector("#repeatList");
   const tool = document.querySelector("#tool");
   const setVolume = document.querySelector("#setVolume");
   const clickVolumeUp = document.querySelector("#clickVolumeUp");
@@ -55,34 +57,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const showDetailText = document.querySelector("#showDetailText");
   const progressBar = document.querySelector("#progressBar");
   const showStatus = document.querySelector("#showStatus");
-  const closePop = document.querySelector("#closePop");
-  const closePopPly = document.querySelector("#closePopPly");
   const closePopList = document.querySelector("#closePopList");
   const overlayList = document.getElementById("overlayList");
   const popupList = document.getElementById("popupList");
+  const sinGer = document.getElementById("sinGer");
 
-  //選單切換 ==> 歌曲
-  let tempTitle = "";
-  audio.src = musicList[selectedId].src; //初始化歌曲 = 0
+  function getSinger() {
+    singer = musicList[selectElement.value].singer;
+    sinGer.innerHTML = singer;
+    temp = musicList[selectElement.value].src;
+  }
+
+  audio.src = musicList[selectedId].src;
   selectElement.addEventListener("change", function (event) {
     selectedId = parseInt(event.target.value);
-    tempTitle = musicList[selectElement.value].title;
     audio.src = musicList[selectedId].src;
+    console.log(musicList[selectElement.value].singer);
+    getSinger();
     if (wasPlaying) {
       play();
-      showDetailText.innerText = `正在播放 ${tempTitle}`;
     }
   });
 
   let wasMute = false;
-  setVolumeFun(); // 顯示初始音量
-  //設定 ==> 音量
+  setVolumeFun();
   function setVolumeFun() {
+    const min = setVolume.min;
+    const max = setVolume.max;
+    const value = setVolume.value;
+    const percentage = ((value - min) / (max - min)) * 100;
+    setVolume.style.background = `linear-gradient(to right, #5fc3b4  ${percentage}%, #8F8F8F ${percentage}%)`;
     audio.volume = setVolume.value / 100;
     showVolume.value = setVolume.value;
     mute();
   }
-  //更換靜音圖示
+
   function mute() {
     if (audio.muted || audio.volume == 0) {
       setMute.setAttribute("class", "fa-solid fa-volume-xmark fa-2x mbtn");
@@ -90,26 +99,25 @@ document.addEventListener("DOMContentLoaded", () => {
       setMute.setAttribute("class", "fa-solid fa-volume-up fa-2x mbtn");
     }
   }
-  //靜音 ==> 切換
+
   setMute.addEventListener("click", function () {
     wasMute = audio.muted;
     console.log("Current mute state:", wasMute);
     audio.muted = !audio.muted;
     mute();
   });
-  setVolume.addEventListener("input", setVolumeFun); // 滑動時顯示音量
+  setVolume.addEventListener("input", setVolumeFun);
   function setVolumeClick(n) {
     setVolume.value = Math.min(100, Math.max(0, parseInt(setVolume.value) + n));
-    setVolumeFun(); // 顯示更改音量
+    setVolumeFun();
   }
   clickVolumeUp.addEventListener("click", function () {
-    setVolumeClick(1);
+    setVolumeClick(5);
   });
   clickVolumeDown.addEventListener("click", function () {
-    setVolumeClick(-1);
+    setVolumeClick(-5);
   });
 
-  //取得時間格式
   function getTimeFormat(t) {
     let m = parseInt(t / 60);
     let s = parseInt(t % 60);
@@ -117,26 +125,32 @@ document.addEventListener("DOMContentLoaded", () => {
     s = s < 10 ? "0" + s : s;
     return m + ":" + s;
   }
-  //曲目歌手進度條
+
   function getMusicTime() {
     showNowTime.innerText = getTimeFormat(audio.currentTime);
     showSongTime.innerText = getTimeFormat(audio.duration);
     progressBar.value = audio.currentTime;
+    const percentage = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.background = `linear-gradient(to right, #5fc3b4 ${percentage}%, #8F8F8F ${percentage}%)`;
   }
-  // 設定 ==> 滑動進度條
+
   function setProgress() {
+    const min = progressBar.min;
+    const max = progressBar.max;
+    const value = progressBar.value;
+    const percentage = ((value - min) / (max - min)) * 100;
+    progressBar.style.background = `linear-gradient(to right, #5fc3b4  ${percentage}%, #8F8F8F ${percentage}%)`;
     audio.currentTime = progressBar.value;
   }
-  progressBar.addEventListener("input", setProgress);
-  // 更新進度條的最大值在音樂的元數據加載完成後
+
   audio.addEventListener("loadedmetadata", function () {
     progressBar.max = audio.duration;
   });
+  progressBar.addEventListener("input", setProgress);
 
-  //判斷有無播放及更新圖示
   let wasPlaying = false;
   function updatePlayStatus() {
-    wasPlaying = !audio.paused; // 更新播放狀態
+    wasPlaying = !audio.paused;
     if (wasPlaying == true) {
       playStopBtn.src = "files/play_top_icon/pause.svg";
     } else {
@@ -144,28 +158,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     console.log("判斷播放:" + wasPlaying);
   }
-  //播放&暫停 ==> 音樂
+
   function stop() {
-    showDetailText.innerText = "音樂暫停中...";
+    showDetailText.innerText = "已暫停";
     audio.pause();
     updatePlayStatus();
     // 清除滑鼠移動計時器
-    clearTimeout(timeoutId);
+    // clearTimeout(timeoutId);
   }
+
   function play() {
     if (currentMode === "randomSong") {
-      showDetailText.innerText = `正在播放 ${
-        musicList[indices[ranIndex]].title
-      }`;
+      singer = musicList[selectElement.value].singer;
+      sinGer.innerHTML = musicList[indices[ranIndex]].singer;
     } else {
-      showDetailText.innerText = `正在播放 ${musicList[selectedId].title}`;
+      getSinger();
     }
-
-    setInterval(() => getMusicTime(), 500);
+    showDetailText.innerText = `播放中`;
+    audio.addEventListener("timeupdate", getMusicTime);
     audio.play();
     updatePlayStatus();
-    timeoutId = setTimeout(onTimeDo, time);
+    // timeoutId = setTimeout(onTimeDo, time);
   }
+
   playStopBtn.addEventListener("click", function () {
     if (audio.paused) {
       play();
@@ -173,13 +188,12 @@ document.addEventListener("DOMContentLoaded", () => {
       stop();
     }
   });
-  //停止&歸零 ==> 音樂
+
   replayBtn.addEventListener("click", function () {
     stop();
-    audio.currentTime = 0; // 時間歸零
+    audio.currentTime = 0;
   });
 
-  //快轉||倒轉 ==> 音樂
   function changeTime(s) {
     audio.currentTime += s;
   }
@@ -189,37 +203,42 @@ document.addEventListener("DOMContentLoaded", () => {
   nextTime.addEventListener("click", function () {
     changeTime(10);
   });
-  //次曲||上曲 ==> 音樂
+
   prevSong.addEventListener("click", function () {
     if (currentMode == "randomSong") {
       if (doubleMode == "randomSongAndRePeat" && ranIndex <= 0) {
         ranIndex = indices.length - 1;
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        getSinger();
       } else if (ranIndex <= 0) {
         ranIndex = 0;
       } else {
         ranIndex -= 1;
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        getSinger();
       }
     } else {
       if (doubleMode == "orderSongAndRePeat" && selectedId <= 0) {
         selectedId = musicList.length - 1;
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
+        getSinger();
       } else if (selectedId <= 0) {
         selectedId = 0;
       } else {
         selectedId -= 1;
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
+        getSinger();
       }
     }
     if (wasPlaying) {
       play();
     }
   });
+
   nextSong.addEventListener("click", function () {
     if (currentMode == "randomSong") {
       if (
@@ -229,12 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
         ranIndex = 0;
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        getSinger();
       } else if (ranIndex + 1 >= indices.length) {
         ranIndex = indices.length - 1;
       } else {
         ranIndex += 1;
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        getSinger();
       }
     } else {
       if (
@@ -244,12 +265,14 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedId = 0;
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
+        getSinger();
       } else if (selectedId >= musicList.length - 1) {
         selectedId = musicList.length - 1;
       } else {
         selectedId += 1;
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
+        getSinger();
       }
     }
     if (wasPlaying) {
@@ -259,93 +282,134 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentMode = "orderSong";
   let doubleMode = "";
-  let reapeatMode = false;
+  let repeatMode = false;
   let temp = "";
+  let ranIndex = 0;
+  let iconIndex = 0;
+  let singer = "";
+
+  const iconFun = [
+    { icon: "fa-right-long", action: orderSong },
+    { icon: "fa-redo", action: repeatSong },
+    { icon: "fa-shuffle", action: randomSong },
+  ];
+
+  function orderSong() {
+    if (repeatMode === false) {
+      currentMode = "orderSong";
+      showStatus.innerHTML = "依序播放";
+    } else {
+      currentMode = "orderSong";
+      doubleMode = "";
+      doubleMode = "orderSongAndRePeat";
+      showStatus.innerHTML = "依序循環播放";
+    }
+  }
+
+  function repeatSong() {
+    currentMode = "repeatSong";
+    temp = audio.src;
+    console.log(temp);
+    showStatus.innerHTML = "單曲重複";
+  }
+
+  function randomSong() {
+    if (repeatMode === false) {
+      currentMode = "randomSong";
+      doubleMode = "";
+      showStatus.innerHTML = "隨機播放";
+    } else {
+      currentMode = "randomSong";
+      doubleMode = "randomSongAndRePeat";
+      showStatus.innerHTML = "隨機循環播放";
+    }
+    ranSong();
+  }
+
+  function updateButton() {
+    if (iconIndex == 0) {
+      carouselButton.className = `fa-solid ${iconFun[iconIndex].icon} fa-2x nbtn `;
+    } else {
+      carouselButton.className = `fa-solid ${iconFun[iconIndex].icon} fa-2x nbtn tbtn`;
+    }
+  }
+
+  carouselButton.addEventListener("click", () => {
+    iconIndex = (iconIndex + 1) % iconFun.length;
+    console.log(iconIndex);
+    iconFun[iconIndex].action();
+    updateButton();
+  });
+
   const functions = {
     list: () => {
       showPopupList();
       document.addEventListener("click", (event) => {
         if (
-          overlayList.style.display === "flex" && // 確保彈窗顯示中
-          !popupList.contains(event.target) && // 點擊不在彈窗內部
-          event.target !== list // 排除顯示按鈕本身
+          overlayList.style.display === "flex" &&
+          !popupList.contains(event.target) &&
+          event.target !== list
         ) {
           closePopupList();
         }
       });
     },
-    orderSong: () => {
-      if (reapeatMode === false) {
-        currentMode = "orderSong";
-        showStatus.innerHTML = "依序播放";
-      } else {
-        currentMode = "orderSong";
-        doubleMode = "";
-        doubleMode = "orderSongAndRePeat";
-        showStatus.innerHTML = "依序循環播放";
-      }
-    },
-    repeatSong: () => {
-      currentMode = "repeatSong";
-      temp = audio.src;
-      console.log(temp);
-      tempTitle = musicList[selectElement.value].title;
-      console.log(tempTitle);
-      showStatus.innerHTML = "單曲重複";
-    },
-    randomSong: () => {
-      if (reapeatMode === false) {
-        currentMode = "randomSong";
-        doubleMode = "";
-        showStatus.innerHTML = "隨機播放";
-      } else {
-        currentMode = "randomSong";
-        doubleMode = "randomSongAndRePeat";
-        showStatus.innerHTML = "隨機循環播放";
-      }
-      ranSong();
-    },
     repeatList: () => {
-      reapeatMode = !reapeatMode;
-      console.log(reapeatMode);
+      repeatMode = !repeatMode;
+      console.log(repeatMode);
       if (currentMode == "orderSong") {
         doubleMode = "orderSongAndRePeat";
         showStatus.innerHTML = "依序循環播放";
-        if (reapeatMode == false) {
-          // currentMode = "orderSong";
+        if (repeatMode == false) {
           doubleMode = "";
-          functions.orderSong();
+          orderSong();
         }
       } else if (currentMode == "randomSong") {
         doubleMode = "randomSongAndRePeat";
         showStatus.innerHTML = "隨機循環播放";
-        if (reapeatMode == false) {
-          // currentMode = "randomSong";
+        if (repeatMode == false) {
           doubleMode = "";
-          functions.randomSong();
+          randomSong();
         }
       }
+      const repeatList = document.querySelector("#repeatList");
+      if (repeatMode == true) {
+        repeatList.setAttribute("class", "fa-solid fa-retweet fa-2x tbtn");
+      } else {
+        repeatList.setAttribute("class", "fa-solid fa-retweet fa-2x nbtn");
+      }
+      console.log(repeatList);
+    },
+    tool: () => {
+      showPopupTool();
+      document.addEventListener("click", (event) => {
+        if (
+          overlayTool.style.display === "flex" &&
+          !popupTool.contains(event.target) &&
+          event.target !== tool
+        ) {
+          closePopToolF();
+        }
+      });
     },
   };
+
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      const id = button.id; // 獲取按鈕的 ID
+      const id = button.id;
       if (functions[id]) {
-        functions[id](); // 執行對應的功能
+        functions[id]();
       } else {
         console.error(`未定義的功能：${id}`);
       }
     });
   });
 
-  // 播放結束 ==> 判斷行為
-  let ranIndex = 0;
   audio.addEventListener("ended", function () {
     if (currentMode === "repeatSong") {
       audio.src = temp;
       if (wasPlaying) {
         play();
-        showDetailText.innerText = `正在播放 ${tempTitle}`;
       }
     } else if (doubleMode == "randomSongAndRePeat") {
       if (ranIndex + 1 >= indices.length) {
@@ -370,7 +434,6 @@ document.addEventListener("DOMContentLoaded", () => {
         defSong();
       }
     } else if (currentMode === "randomSong") {
-      // showIndices(0);
       if (ranIndex < indices.length) {
         if (ranIndex + 1 == indices.length) {
           stop();
@@ -405,52 +468,55 @@ document.addEventListener("DOMContentLoaded", () => {
     indices = Array.from({ length: musicList.length }, (_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]]; // 交換元素
+      [indices[i], indices[j]] = [indices[j], indices[i]];
     }
     console.log("原始陣列:", musicList);
     console.log("隨機索引:", indices);
-    console.log("顯示索引:", indices[ranIndex] + typeof indices[ranIndex]); // 顯示當前索引
-    if (wasPlaying == false) {
+    console.log("顯示索引:", indices[ranIndex] + typeof indices[ranIndex]);
+    if (wasPlaying == true) {
+    } else {
       end();
     }
   }
   function end() {
     audio.src = musicList[indices[ranIndex]].src;
     selectElement.value = indices[ranIndex];
+    singer = musicList[indices[ranIndex]].singer;
+    sinGer.innerHTML = singer;
   }
 
   //=====================================================================
 
-  let timeoutId;
-  let time = 30000;
-  function onTimeDo() {
-    console.log("滑鼠未移動超過1分鐘，執行動作");
-    showPopup();
-    stop();
-  }
-  // 添加滑鼠移動事件監聽器
-  window.addEventListener("mousemove", (event) => {
-    if (wasPlaying == true) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(onTimeDo, time);
-    }
-  });
+  // let timeoutId;
+  // let time = 30000;
+  // function onTimeDo() {
+  //   console.log("滑鼠未移動超過X分鐘，執行動作");
+  //   showPopup();
+  //   stop();
+  // }
+  // // 添加滑鼠移動事件監聽器
+  // window.addEventListener("mousemove", (event) => {
+  //   if (wasPlaying == true) {
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(onTimeDo, time);
+  //   }
+  // });
 
-  // 顯示彈跳視窗
-  function showPopup() {
-    document.getElementById("overlay").style.display = "flex";
-  }
-  // 關閉彈跳視窗
-  function closePopup() {
-    document.getElementById("overlay").style.display = "none";
-  }
-  closePop.addEventListener("click", function () {
-    closePopup();
-  });
-  closePopPly.addEventListener("click", function () {
-    closePopup();
-    play();
-  });
+  // // 顯示彈跳視窗
+  // function showPopup() {
+  //   document.getElementById("overlay").style.display = "flex";
+  // }
+  // // 關閉彈跳視窗
+  // function closePopup() {
+  //   document.getElementById("overlay").style.display = "none";
+  // }
+  // closePop.addEventListener("click", function () {
+  //   closePopup();
+  // });
+  // closePopPly.addEventListener("click", function () {
+  //   closePopup();
+  //   play();
+  // });
 
   // ======================================================
 
@@ -462,23 +528,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   closePopList.addEventListener("click", closePopupList);
 
-  for (let i = 0; i < musicList.length; i++) {
-    let contentSong = document.createElement("div");
-    let xmark = document.createElement("i");
-    let box = document.createElement("div");
-    contentSong.id = "contentSong";
-    xmark.id = "xmark";
-    box.id = "box";
-    contentSong.classList.add("contentSong");
-    xmark.classList.add("xmark");
-    box.classList.add("box");
-    contentSong.innerHTML = `<div>${musicList[i].title}</div>`;
-    xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-    box.appendChild(contentSong);
-    box.appendChild(xmark);
-    document.querySelector("#popupListUp").appendChild(box);
+  ListUp();
+  function ListUp() {
+    const listContainer = document.querySelector("#popupListUp");
+    listContainer.innerHTML = "";
+    for (let i = 0; i < musicList.length; i++) {
+      let contentSong = document.createElement("div");
+      let xmark = document.createElement("i");
+      let box = document.createElement("div");
+      contentSong.id = "contentSong";
+      xmark.id = "xmark";
+      box.id = "box";
+      contentSong.classList.add("contentSong");
+      xmark.classList.add("xmark");
+      box.classList.add("box");
+      contentSong.innerHTML = `<div>${musicList[i].title}</div>`;
+      xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+      box.appendChild(contentSong);
+      box.appendChild(xmark);
+      document.querySelector("#popupListUp").appendChild(box);
+      xmark.addEventListener("click", () => {
+        newMusicList.push(musicList[i]);
+        musicList.splice(i, 1);
+        updateUI();
+      });
+    }
   }
-  // 為每個 box 添加事件監聽
+  ListDown();
+  function ListDown() {
+    const listContainer = document.querySelector("#popupListDown");
+    listContainer.innerHTML = "";
+    for (let i = 0; i < newMusicList.length; i++) {
+      let contentSong = document.createElement("div");
+      let xmark = document.createElement("i");
+      let box = document.createElement("div");
+      contentSong.id = "contentSong";
+      xmark.id = "xmark";
+      box.id = "box";
+      contentSong.classList.add("contentSong");
+      xmark.classList.add("xmark");
+      box.classList.add("box");
+      contentSong.innerHTML = `<div>${newMusicList[i].title}</div>`;
+      xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+      box.appendChild(contentSong);
+      box.appendChild(xmark);
+      document.querySelector("#popupListDown").appendChild(box);
+      xmark.addEventListener("click", () => {
+        musicList.push(newMusicList[i]);
+        newMusicList.splice(i, 1);
+        updateUI();
+      });
+    }
+  }
+
+  function updateUI() {
+    ListUp();
+    ListDown();
+  }
   const boxes = document.querySelectorAll(".box");
   boxes.forEach((box) => {
     box.addEventListener("mouseenter", () => {
@@ -495,9 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ======================================================
   const popupWindow = document.getElementById("popupWindow");
-  // 當滑鼠移到按鈕上時，顯示彈出視窗
   setMute.addEventListener("mouseenter", () => {
     const rect = setMute.getBoundingClientRect();
     popupWindow.style.top = `${rect.top - popupWindow.offsetHeight}px`;
@@ -508,25 +612,88 @@ document.addEventListener("DOMContentLoaded", () => {
     popupWindow.classList.add("show");
   });
 
-  // 當滑鼠移出按鈕時，隱藏彈出視窗
   setMute.addEventListener("mouseleave", () => {
     setTimeout(() => {
       if (!popupWindow.matches(":hover")) {
-        // 檢查滑鼠是否在彈出視窗內
         popupWindow.classList.remove("show");
         popupWindow.classList.add("hidden");
       }
     }, 100);
   });
-  // 當滑鼠進入彈出視窗時，保持顯示
+
   popupWindow.addEventListener("mouseenter", () => {
     popupWindow.classList.remove("hidden");
     popupWindow.classList.add("show");
   });
 
-  // 當滑鼠移出彈出視窗時，隱藏視窗
   popupWindow.addEventListener("mouseleave", () => {
     popupWindow.classList.remove("show");
     popupWindow.classList.add("hidden");
   });
+
+  const overlayTool = document.getElementById("overlayTool");
+  const setTool = document.getElementById("setTool");
+  const closePopTool = document.getElementById("closePopTool");
+  const closePopSet = document.getElementById("closePopSet");
+  const popupTool = document.getElementById("popupTool");
+
+  function showPopupTool() {
+    overlayTool.style.display = "flex";
+    closePopSet.addEventListener("click", function () {
+      time = setTool.value * 1000;
+      console.log(time);
+      if (time == 0) {
+        setTool.value = "30";
+      } else if (time !== 0) {
+        closePopToolF();
+      }
+    });
+  }
+  function closePopToolF() {
+    document.getElementById("overlayTool").style.display = "none";
+  }
+
+  function adjustSelectWidth() {
+    const tempSpan = document.createElement("span");
+    tempSpan.style.visibility = "hidden";
+    tempSpan.style.position = "absolute";
+    tempSpan.style.font = window.getComputedStyle(selectElement).font;
+    tempSpan.innerText =
+      selectElement.options[selectElement.selectedIndex].text;
+
+    document.body.appendChild(tempSpan);
+    selectElement.style.width = `${tempSpan.offsetWidth}px`;
+    document.body.removeChild(tempSpan);
+  }
+  adjustSelectWidth();
+  selectElement.addEventListener("change", adjustSelectWidth);
+  document.querySelector(".arrow").addEventListener("click", () => {
+    document.getElementById("selectElement").focus();
+  });
+  const arrow = document.querySelector(".arrow");
+  arrow.addEventListener("click", () => {
+    selectElement.focus();
+  });
+
+  //当select获得焦点时触发，确保select弹出菜单
+  // selectElement.addEventListener("focus", () => {
+  //   setTimeout(() => {
+  //     // 通过点击操作确保select弹出
+  //     selectElement.size = selectElement.length;
+  //   }, 100);
+  // });
+
+  // // 在select失去焦点时，关闭下拉菜单
+  // selectElement.addEventListener("blur", () => {
+  //   selectElement.size = 1; // 恢复默认大小
+  // });
 });
+
+//
+//
+//
+//bug
+//重複及循環同時 ==> select !== 音源  ====> 已處理
+//重播 ==> 切換歌手未更新 ===> 已處理
+//初始化後單曲重複 最後一首前按循環無法下一首 ==> 邏輯沒錯、不隸屬任何清單
+//單曲循環 => 手動切換到次首 無法單曲循環 ==> 已處理
