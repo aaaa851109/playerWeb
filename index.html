@@ -13,17 +13,8 @@
 
 <body>
   <audio id="audio" src="###"></audio>
-  <div class="d-flex align-items-center" style="height: 80vh">
-    <div id="controlPanel" class="container text-center">
-
-      <!-- <div class="d-flex align-items-center justify-content-center col-6 mx-auto mb-3">
-        <select id="selectElement" class="col-8 h1">
-
-        </select>
-        <div class="arrow">
-          <i class="fa-solid fa-caret-up fa-rotate-180 fa-2x"></i>
-        </div>
-      </div> -->
+  <div class="d-flex align-items-center " style="height: 80vh">
+    <div id="controlPanel" class="container text-center mx-auto">
       <div class="select-wrapper mb-3">
         <select id="selectElement" class="h1">
         </select>
@@ -33,7 +24,7 @@
       </div>
 
 
-      <div id="sinGer" class="d-flex justify-content-center align-items-center col-6 mx-auto mb-4 h3">蕭秉治</div>
+      <div id="sinGer" class="d-flex justify-content-center align-items-center col-6 mx-auto mb-4 h3"></div>
       <div class="d-flex justify-content-center align-items-center col-6 mx-auto mb-2">
         <div id="showNowTime" class="text-start" style="flex: 1;">
           00:00
@@ -54,11 +45,11 @@
           <button id="list" class="fa-solid fa-list fa-2x nbtn"></button>
           <!-- list 點選彈出視窗 -->
           <div id="overlayList" class="justify-content-center align-items-center">
-            <div id="popupList" class="row ">
-              <div id="popupListUp" class="px-3 py-3 "></div>
-              <div class="custom-hr"></div>
-              <div id="popupListDown" class="px-3 py-3 "></div>
-              <div class=" d-flex justify-content-between px-3 py-2">
+            <div id="popupList" class="row py-4 px-4"> <!--彈出視窗 -->
+              <div id="popupListUp" class="pb-3"></div> <!--上清單 -->
+              <div class="custom-hr mx-auto pb-3"></div> <!--hr -->
+              <div id="popupListDown" class=""></div> <!--下清單 -->
+              <div class=" d-flex justify-content-between pt-1">
                 <button id="addPopList">＋新增歌曲</button>
                 <button id="closePopList">取消</button>
               </div>
@@ -77,12 +68,12 @@
 
           <!-- tool 點選彈出視窗 -->
           <div id="overlayTool" class="overlay">
-            <div id="popupTool" class="popup">
-              <h2>設定閒置</h2>
-              <p>請輸入計時時間秒數</p>
-              <input type="number" value="" id="setTool" placeholder="30">
-              <button id="closePopSet">確定</button>
-              <button id="closePopTool">取消</button>
+            <div id="popupTool" class="popup px-4 py-4">
+              <h2 class="mb-1">設定閒置</h2>
+              <p class="mb-4">請輸入計時間秒數</p>
+              <input class="" type="number" value="" id="setTool" placeholder="30">
+              <button class="px-2 py-1" id="closePopSet">確定</button>
+              <button class="px-2 py-1" id="closePopTool">取消</button>
             </div>
           </div>
 
@@ -97,11 +88,11 @@
 
           <!-- 彈出視窗 -->
           <div id="popupWindow" class="volumePopup">
-            <input id="showVolume" type="text" class="text" readonly />
+            <input id="showVolume" type="text" class="text mt-3" readonly />
             <button id="clickVolumeUp" class="ipt">
               <i class="fa-solid fa-plus "></i>
             </button>
-            <div class="cen">
+            <div class="cen my-3">
               <input id="setVolume" min="0" max="100" type="range" value="50" />
             </div>
             <button id="clickVolumeDown" class="ipt">
@@ -117,7 +108,7 @@
           <button id="prevTime" class="fa-solid fa-backward fa-2x mbtn"></button>
         </div>
         <div class="col d-flex justify-content-center">
-          <img id="playStopBtn" class="sbtn" src="files/play_top_icon/play.svg" alt="Play Button" />
+          <img id="playStopBtn" class="sbtn" src="play_top_icon/play.svg" alt="Play Button" />
         </div>
         <div class="col d-flex justify-content-end">
           <button id="nextTime" class="fa-solid fa-backward fa-rotate-180 fa-2x mbtn"></button>

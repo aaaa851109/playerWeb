@@ -1,40 +1,82 @@
 let musicList = [
   {
-    id: 0,
+    title: "離開的一路上 Farewell",
+    src: "https://storage.googleapis.com/music-api/%E9%9B%A2%E9%96%8B%E7%9A%84%E4%B8%80%E8%B7%AF%E4%B8%8A%20Farewell",
+    singer: "理想混蛋",
+  },
+  {
+    title: "How You Like That",
+    src: "https://storage.googleapis.com/music-api/How%20You%20Like%20That",
+    singer: "BLACKPINK",
+  },
+  {
+    title: "能遇见就很不错了",
+    src: "https://storage.googleapis.com/music-api/%E8%83%BD%E9%81%87%E8%A7%81%E5%B0%B1%E5%BE%88%E4%B8%8D%E9%94%99%E4%BA%86",
+    singer: "菲道尔",
+  },
+  {
+    title: "APT",
+    src: "https://storage.googleapis.com/music-api/APT",
+    singer: "ROSÉ & 火星人布魯諾Bruno Mars",
+  },
+  {
+    title: "我喜歡你 I'm Into You",
+    src: "https://storage.googleapis.com/music-api/%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20I'm%20Into%20You",
+    singer: "芒果醬 Mango Jump",
+  },
+  {
+    title: "光害 Light Pollution",
+    src: "https://storage.googleapis.com/music-api/%E5%85%89%E5%AE%B3%20Light%20Pollution",
+    singer: "謝和弦",
+  },
+
+  {
+    title: "Small girl",
+    src: "https://storage.googleapis.com/music-api/Small%20girl",
+    singer: "李泳知 이영지 feat. 도경수D.O.",
+  },
+];
+
+let newMusicList = [
+  {
     title: "毒藥",
-    src: "files/music/poison.mp3",
+    src: "https://storage.googleapis.com/music-api/%E6%AF%92%E8%97%A5",
     singer: "蕭秉治",
   },
   {
-    id: 1,
     title: "你是真的離開我",
-    src: "files/music/leave.mp3",
+    src: "https://storage.googleapis.com/music-api/%E4%BD%A0%E6%98%AF%E7%9C%9F%E7%9A%84%E9%9B%A2%E9%96%8B%E6%88%91",
     singer: "謝和弦",
   },
   {
-    id: 2,
     title: "仗著",
-    src: "files/music/relyon.mp3",
+    src: "https://storage.googleapis.com/music-api/%E4%BB%97%E8%91%97",
     singer: "陳壹千",
   },
+
   {
-    id: 3,
     title: "魚",
-    src: "files/music/fish.mp3",
+    src: "https://storage.googleapis.com/music-api/%E9%AD%9A",
     singer: "怕胖團",
   },
 ];
-let newMusicList = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   const selectElement = document.querySelector("#selectElement");
   let selectedId = 0;
-  musicList.forEach((song) => {
-    const option = document.createElement("option");
-    option.value = song.id;
-    option.textContent = song.title;
-    selectElement.appendChild(option);
-  });
+
+  musicListFun();
+  function musicListFun() {
+    selectElement.innerHTML = "";
+    musicList.forEach((song, i) => {
+      const option = document.createElement("option");
+      option.value = i;
+      selectElement.value = option.value;
+      option.textContent = song.title;
+      selectElement.appendChild(option);
+    });
+  }
+
   const audio = document.querySelector("#audio");
   const playStopBtn = document.querySelector("#playStopBtn");
   const replayBtn = document.querySelector("#replayBtn");
@@ -58,21 +100,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressBar = document.querySelector("#progressBar");
   const showStatus = document.querySelector("#showStatus");
   const closePopList = document.querySelector("#closePopList");
-  const overlayList = document.getElementById("overlayList");
-  const popupList = document.getElementById("popupList");
-  const sinGer = document.getElementById("sinGer");
+  const overlayList = document.querySelector("#overlayList");
+  const popupList = document.querySelector("#popupList");
+  const sinGer = document.querySelector("#sinGer");
 
+  let singer = musicList[selectElement.value].singer;
+  sinGer.innerHTML = singer;
   function getSinger() {
     singer = musicList[selectElement.value].singer;
     sinGer.innerHTML = singer;
     temp = musicList[selectElement.value].src;
+    document.title = `playWeb ${musicList[selectElement.value].title}`;
   }
 
   audio.src = musicList[selectedId].src;
   selectElement.addEventListener("change", function (event) {
     selectedId = parseInt(event.target.value);
     audio.src = musicList[selectedId].src;
-    console.log(musicList[selectElement.value].singer);
     getSinger();
     if (wasPlaying) {
       play();
@@ -151,15 +195,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let wasPlaying = false;
   function updatePlayStatus() {
     wasPlaying = !audio.paused;
-    if (wasPlaying == true) {
-      playStopBtn.src = "files/play_top_icon/pause.svg";
-    } else {
-      playStopBtn.src = "files/play_top_icon/play.svg";
-    }
+
     console.log("判斷播放:" + wasPlaying);
   }
 
   function stop() {
+    playStopBtn.src = "play_top_icon/play.svg";
     showDetailText.innerText = "已暫停";
     audio.pause();
     updatePlayStatus();
@@ -168,6 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function play() {
+    playStopBtn.src = "play_top_icon/pause.svg";
     if (currentMode === "randomSong") {
       singer = musicList[selectElement.value].singer;
       sinGer.innerHTML = musicList[indices[ranIndex]].singer;
@@ -211,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
         getSinger();
+        adjustSelectWidth();
       } else if (ranIndex <= 0) {
         ranIndex = 0;
       } else {
@@ -218,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
         getSinger();
+        adjustSelectWidth();
       }
     } else {
       if (doubleMode == "orderSongAndRePeat" && selectedId <= 0) {
@@ -225,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
         getSinger();
+        adjustSelectWidth();
       } else if (selectedId <= 0) {
         selectedId = 0;
       } else {
@@ -232,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
         getSinger();
+        adjustSelectWidth();
       }
     }
     if (wasPlaying) {
@@ -249,6 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
         getSinger();
+        adjustSelectWidth();
       } else if (ranIndex + 1 >= indices.length) {
         ranIndex = indices.length - 1;
       } else {
@@ -256,6 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
         getSinger();
+        adjustSelectWidth();
       }
     } else {
       if (
@@ -266,6 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
         getSinger();
+        adjustSelectWidth();
       } else if (selectedId >= musicList.length - 1) {
         selectedId = musicList.length - 1;
       } else {
@@ -273,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
         getSinger();
+        adjustSelectWidth();
       }
     }
     if (wasPlaying) {
@@ -286,7 +336,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let temp = "";
   let ranIndex = 0;
   let iconIndex = 0;
-  let singer = "";
 
   const iconFun = [
     { icon: "fa-right-long", action: orderSong },
@@ -416,12 +465,16 @@ document.addEventListener("DOMContentLoaded", () => {
         ranIndex = 0;
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        document.title = `playWeb ${musicList[selectElement.value].title}`;
+        adjustSelectWidth();
         play();
       } else {
         ranIndex += 1;
         console.log(indices[ranIndex]);
         audio.src = musicList[indices[ranIndex]].src;
         selectElement.value = indices[ranIndex];
+        document.title = `playWeb ${musicList[selectElement.value].title}`;
+        adjustSelectWidth();
         play();
       }
     } else if (doubleMode == "orderSongAndRePeat") {
@@ -429,6 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedId = 0;
         audio.src = musicList[selectedId].src;
         selectElement.value = selectedId;
+        adjustSelectWidth();
         play();
       } else {
         defSong();
@@ -436,6 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (currentMode === "randomSong") {
       if (ranIndex < indices.length) {
         if (ranIndex + 1 == indices.length) {
+          adjustSelectWidth();
           stop();
           audio.currentTime = 0;
         } else {
@@ -443,6 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log(indices[ranIndex]);
           audio.src = musicList[indices[ranIndex]].src;
           selectElement.value = indices[ranIndex];
+          document.title = `playWeb ${musicList[selectElement.value].title}`;
+          adjustSelectWidth();
           play();
         }
       }
@@ -452,7 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function defSong() {
-    if (musicList[selectedId].id == musicList.length - 1) {
+    if (musicList[selectedId] == musicList.length - 1) {
       stop();
       audio.currentTime = 0;
     } else {
@@ -461,6 +518,7 @@ document.addEventListener("DOMContentLoaded", () => {
       selectElement.value = selectedId;
       play();
     }
+    adjustSelectWidth();
   }
 
   let indices;
@@ -488,7 +546,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //=====================================================================
 
   // let timeoutId;
-  // let time = 30000;
+  let time = 30000;
   // function onTimeDo() {
   //   console.log("滑鼠未移動超過X分鐘，執行動作");
   //   showPopup();
@@ -502,21 +560,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //   }
   // });
 
-  // // 顯示彈跳視窗
-  // function showPopup() {
-  //   document.getElementById("overlay").style.display = "flex";
-  // }
-  // // 關閉彈跳視窗
-  // function closePopup() {
-  //   document.getElementById("overlay").style.display = "none";
-  // }
-  // closePop.addEventListener("click", function () {
-  //   closePopup();
-  // });
-  // closePopPly.addEventListener("click", function () {
-  //   closePopup();
-  //   play();
-  // });
+  // 顯示彈跳視窗
+  function showPopup() {
+    document.getElementById("overlay").style.display = "flex";
+  }
+  // 關閉彈跳視窗
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+  }
 
   // ======================================================
 
@@ -532,7 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function ListUp() {
     const listContainer = document.querySelector("#popupListUp");
     listContainer.innerHTML = "";
-    for (let i = 0; i < musicList.length; i++) {
+    musicList.forEach((song, i) => {
       let contentSong = document.createElement("div");
       let xmark = document.createElement("i");
       let box = document.createElement("div");
@@ -542,23 +593,25 @@ document.addEventListener("DOMContentLoaded", () => {
       contentSong.classList.add("contentSong");
       xmark.classList.add("xmark");
       box.classList.add("box");
-      contentSong.innerHTML = `<div>${musicList[i].title}</div>`;
+      contentSong.innerHTML = `<div>${song.title}</div>`;
       xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
       box.appendChild(contentSong);
       box.appendChild(xmark);
-      document.querySelector("#popupListUp").appendChild(box);
+      listContainer.appendChild(box);
+
       xmark.addEventListener("click", () => {
+        event.stopPropagation(); // 阻止事件冒泡
         newMusicList.push(musicList[i]);
         musicList.splice(i, 1);
         updateUI();
       });
-    }
+    });
   }
   ListDown();
   function ListDown() {
     const listContainer = document.querySelector("#popupListDown");
     listContainer.innerHTML = "";
-    for (let i = 0; i < newMusicList.length; i++) {
+    newMusicList.forEach((song, i) => {
       let contentSong = document.createElement("div");
       let xmark = document.createElement("i");
       let box = document.createElement("div");
@@ -568,38 +621,46 @@ document.addEventListener("DOMContentLoaded", () => {
       contentSong.classList.add("contentSong");
       xmark.classList.add("xmark");
       box.classList.add("box");
-      contentSong.innerHTML = `<div>${newMusicList[i].title}</div>`;
-      xmark.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+      contentSong.innerHTML = `<div>${song.title}</div>`;
+      xmark.innerHTML = `<i class="fa-solid fa-angle-up"></i>`;
       box.appendChild(contentSong);
       box.appendChild(xmark);
-      document.querySelector("#popupListDown").appendChild(box);
+      listContainer.appendChild(box);
+
       xmark.addEventListener("click", () => {
+        event.stopPropagation(); // 阻止事件冒泡
         musicList.push(newMusicList[i]);
         newMusicList.splice(i, 1);
         updateUI();
       });
-    }
+    });
   }
 
   function updateUI() {
     ListUp();
     ListDown();
+    boxesFun();
+    musicListFun();
+    getSinger();
   }
-  const boxes = document.querySelectorAll(".box");
-  boxes.forEach((box) => {
-    box.addEventListener("mouseenter", () => {
-      const children = box.querySelectorAll("*");
-      children.forEach((child) => {
-        child.style.color = "#FFD700 ";
+  boxesFun();
+  function boxesFun() {
+    const boxes = document.querySelectorAll(".box");
+    boxes.forEach((box) => {
+      box.addEventListener("mouseenter", () => {
+        const children = box.querySelectorAll("*");
+        children.forEach((child) => {
+          child.style.color = "#FFD700 ";
+        });
+      });
+      box.addEventListener("mouseleave", () => {
+        const children = box.querySelectorAll("*");
+        children.forEach((child) => {
+          child.style.color = "";
+        });
       });
     });
-    box.addEventListener("mouseleave", () => {
-      const children = box.querySelectorAll("*");
-      children.forEach((child) => {
-        child.style.color = "";
-      });
-    });
-  });
+  }
 
   const popupWindow = document.getElementById("popupWindow");
   setMute.addEventListener("mouseenter", () => {
@@ -641,7 +702,6 @@ document.addEventListener("DOMContentLoaded", () => {
     overlayTool.style.display = "flex";
     closePopSet.addEventListener("click", function () {
       time = setTool.value * 1000;
-      console.log(time);
       if (time == 0) {
         setTool.value = "30";
       } else if (time !== 0) {
@@ -652,6 +712,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function closePopToolF() {
     document.getElementById("overlayTool").style.display = "none";
   }
+  closePopTool.addEventListener("click", closePopToolF);
 
   function adjustSelectWidth() {
     const tempSpan = document.createElement("span");
@@ -697,3 +758,10 @@ document.addEventListener("DOMContentLoaded", () => {
 //重播 ==> 切換歌手未更新 ===> 已處理
 //初始化後單曲重複 最後一首前按循環無法下一首 ==> 邏輯沒錯、不隸屬任何清單
 //單曲循環 => 手動切換到次首 無法單曲循環 ==> 已處理
+
+//待處理
+//條整視窗大小無法更新select寬度 ==> 留到RWD
+//select彈出視窗
+//settimeout for long time
+//playstopbtn hover
+//docs
