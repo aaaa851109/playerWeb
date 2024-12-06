@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自訂彈出視窗與原生 Select</title>
+    <style>
+        /* 隱藏原生選單，但保留其功能 */
+        select {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 10;
+
+            cursor: pointer;
+        }
+
+        /* 外部容器 */
+        .custom-select-container {
+            position: relative;
+            width: 327px;
+
+        }
+
+        /* 顯示選單的區域 */
+        .custom-display {
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px 12px;
+            font-size: 16px;
+            color: #333;
+
+            cursor: pointer;
+        }
+
+        /* 彈出視窗的選項列表 */
+        .custom-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: blueviolet;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            z-index: 9;
+        }
+
+        .custom-options div {
+            padding: 10px 12px;
+            cursor: pointer;
+            background-color: blueviolet;
+        }
+
+        .custom-options div:hover {
+            /* background-color: #f0f0f0; */
+            background-color: blueviolet;
+        }
+
+        /* 顯示彈出視窗 */
+        .custom-options.show {
+            display: block;
+            background-color: blueviolet;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>自訂彈出視窗與原生 Select</h1>
+    <div class="custom-select-container">
+        <!-- 原生選單 -->
+        <select id="nativeSelect">
+            <option value="0">離開的一路上 Farewell</option>
+            <option value="1">How You Like That</option>
+            <option value="2">能遇见就很不错了</option>
+            <option value="3">APT</option>
+            <option value="4">我喜歡你 I'm Into You</option>
+            <option value="5">光害 Light Pollution</option>
+            <option value="6">Small girl</option>
+        </select>
+
+        <!-- 自訂顯示區域 -->
+        <div class="custom-display" id="customDisplay">請選擇一首音樂</div>
+        <!-- 自訂選項列表 -->
+        <div class="custom-options" id="customOptions"></div>
+    </div>
+
+    <script>
+        const nativeSelect = document.getElementById('nativeSelect');
+        const customDisplay = document.getElementById('customDisplay');
+        const customOptions = document.getElementById('customOptions');
+
+        // 初始化自訂選項列表
+        Array.from(nativeSelect.options).forEach((option, index) => {
+            const customOption = document.createElement('div');
+            customOption.textContent = option.textContent;
+            customOption.dataset.value = option.value;
+
+            // 點擊自訂選項時更新原生選單
+            customOption.addEventListener('click', () => {
+                nativeSelect.selectedIndex = index;
+                customDisplay.textContent = option.textContent;
+                customOptions.classList.remove('show');
+            });
+
+            customOptions.appendChild(customOption);
+        });
+
+        // 點擊顯示彈出選項
+        customDisplay.addEventListener('click', () => {
+            customOptions.classList.toggle('show');
+        });
+
+        // 點擊其他區域時關閉選單
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select-container')) {
+                customOptions.classList.remove('show');
+            }
+        });
+
+        // 當原生選單變更時同步更新自訂選單
+        nativeSelect.addEventListener('change', () => {
+            const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+            customDisplay.textContent = selectedOption.textContent;
+        });
+    </script>
+</body>
+
+</html>

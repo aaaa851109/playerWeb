@@ -25,6 +25,15 @@ body {
   text-align: center;
   width: 100%;
 }
+#selectElement option{
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: #0D1C26;
+  color: white;
+  border: none;
+  outline: none; 
+}
 .arrow {
   color:#666;
   cursor: pointer;

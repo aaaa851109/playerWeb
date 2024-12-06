@@ -15,7 +15,7 @@ let musicList = [
     singer: "菲道尔",
   },
   {
-    title: "APT",
+    title: "APT.",
     src: "https://storage.googleapis.com/music-api/APT",
     singer: "ROSÉ & 火星人布魯諾Bruno Mars",
   },
@@ -373,6 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showStatus.innerHTML = "隨機循環播放";
     }
     ranSong();
+    getSinger();
   }
 
   function updateButton() {
