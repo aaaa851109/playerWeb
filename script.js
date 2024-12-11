@@ -716,6 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   closePopTool.addEventListener("click", closePopToolF);
 
+  //for select
   function adjustSelectWidth() {
     const tempSpan = document.createElement("span");
     tempSpan.style.visibility = "hidden";
@@ -754,12 +755,13 @@ document.addEventListener("DOMContentLoaded", () => {
 //
 //
 //
+
 //bug
-//重複及循環同時 ==> select !== 音源  ====> 已處理
-//重播 ==> 切換歌手未更新 ===> 已處理
-//初始化後單曲重複 最後一首前按循環無法下一首 ==> 邏輯沒錯、不隸屬任何清單
-//單曲循環 => 手動切換到次首 無法單曲循環 ==> 已處理
-//隨機循環 => select singer not update 已處理
+//重複及循環同時 ==> select != 音源  >>>> 已處理
+//重播 ==> 切換歌手未更新 >>>> 已處理
+//初始化後單曲重複 最後一首前按循環無法下一首 >>>> 邏輯沒錯、不隸屬任何清單
+//單曲循環 ==> 手動切換到次首無法單曲循環 >>>> 已處理
+//隨機循環 ==> select singer not update >>>> 已處理
 
 //待處理
 //條整視窗大小無法更新select寬度 ==> 留到RWD
