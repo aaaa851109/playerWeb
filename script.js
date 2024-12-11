@@ -121,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wasPlaying) {
       play();
     }
+    getSinger();
   });
 
   let wasMute = false;
@@ -736,13 +737,12 @@ document.addEventListener("DOMContentLoaded", () => {
   arrow.addEventListener("click", () => {
     selectElement.focus();
   });
+  //
 
-  //当select获得焦点时触发，确保select弹出菜单
   // selectElement.addEventListener("focus", () => {
   //   setTimeout(() => {
-  //     // 通过点击操作确保select弹出
   //     selectElement.size = selectElement.length;
-  //   }, 100);
+  //   }, 5000);
   // });
 
   // // 在select失去焦点时，关闭下拉菜单
@@ -759,6 +759,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //重播 ==> 切換歌手未更新 ===> 已處理
 //初始化後單曲重複 最後一首前按循環無法下一首 ==> 邏輯沒錯、不隸屬任何清單
 //單曲循環 => 手動切換到次首 無法單曲循環 ==> 已處理
+//隨機循環 => select singer not update 已處理
 
 //待處理
 //條整視窗大小無法更新select寬度 ==> 留到RWD

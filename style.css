@@ -1,6 +1,6 @@
 *{
   padding: 0 !important;
-  margin: 0 !important
+  margin: 0 !important;
 }
 
 body {
@@ -50,7 +50,6 @@ body {
   font-size: 1.3rem;
   font-weight: 300;
 }
-
 
 #progressBar {
   -webkit-appearance: none; 
@@ -282,4 +281,64 @@ body {
 .popup > input{
   outline: none; 
   width: 5rem;
+}
+
+
+
+@media only screen and (min-width: 1200px) {
+  .no, .no > * {
+    display: flex;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .no, .no > * {
+    display: none !important;
+  }
+  .ch{
+    flex: 0 0 auto; 
+    width: 8.333333%;
+  }
+  .ch-0{
+    margin-right : 15%!important;
+  }
+  .ch-2{
+    margin-right : 70px!important;
+    margin-left : 70px!important;
+  }
+}
+@media only screen and (max-width: 767px) {
+  body{
+    width: 90%;
+    margin: 0 auto!important; 
+  }
+  .ch-0 {
+    display: none !important; 
+  }
+  .ch-t{
+    display: none !important;
+  }
+  .ch-box{
+    justify-content: space-between!important;
+    width: 100%;
+  }
+  .ch-2{
+    margin : 0px!important;
+  }
+  .ch{
+    flex: 1; 
+  }
+  .ch-f{
+    flex: 0;
+  }
+  .row{
+    width: 100%;
+  }
+  .d-flex{
+    width: 100%;
+  }
+  .showDet{
+    justify-content: space-between!important;
+   
+  }
 }
